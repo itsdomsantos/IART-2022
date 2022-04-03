@@ -1,6 +1,5 @@
 import pygame as pg
-import pygame.font
-import sys
+
 
 
 
@@ -16,6 +15,7 @@ class Display:
         self.BLACK = (0, 0, 0)
         self.BLOCKSIZE = 100
 
+<<<<<<< HEAD
 
 
 class Piece:
@@ -74,3 +74,16 @@ def draw_board(self):
 
     pg.display.update()
 
+=======
+    def draw_board(self):
+        pg.init()
+        screen = pg.display.set_mode((self.width, self.heigth))
+
+        screen.fill('#BA8C63')
+        for x in range(0, self.width, self.BLOCKSIZE):
+            for y in range(0, self.heigth, self.BLOCKSIZE):
+                rect = pg.Rect(x, y, self.BLOCKSIZE, self.BLOCKSIZE)
+                pg.draw.rect(screen, self.BLACK, rect, 1)
+
+        pg.display.update()
+>>>>>>> a18b0669ce665c66e3bd0071b4799ad39b721ee1

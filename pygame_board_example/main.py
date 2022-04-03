@@ -1,18 +1,13 @@
 import display
-size = 0
-def readBoard():
-    f = open("level1.txt", 'r')
-    size = f.read()
-    print size
-    f.close()
-
+import board
 
 def main():
-    readBoard()
-    p1 = display.Display(5)
+    game = board.Board("level1.txt")
+    print(game.pieces)
+    p1 = display.Display(game.size)
 
     while True:
-        display.draw_board(p1)
+        p1.draw_board()
 
 
 main()
