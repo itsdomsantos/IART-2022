@@ -1,8 +1,6 @@
 import pygame as pg
 
 
-
-
 class Display:
 
     def __init__(self, size):
@@ -15,16 +13,25 @@ class Display:
         self.BLACK = (0, 0, 0)
         self.BLOCKSIZE = 100
 
-<<<<<<< HEAD
+    def draw_board(self):
+        pg.init()
+        screen = pg.display.set_mode((self.width, self.heigth))
 
+        screen.fill('#BA8C63')
+        for x in range(0, self.width, self.BLOCKSIZE):
+            for y in range(0, self.heigth, self.BLOCKSIZE):
+                rect = pg.Rect(x, y, self.BLOCKSIZE, self.BLOCKSIZE)
+                pg.draw.rect(screen, self.BLACK, rect, 1)
 
+        pg.display.update()
+
+'''
 class Piece:
-    def __init__(self, team, type, image, killable = False):
+    def __init__(self, team, type, image, killable=False):
         self.image = image
         self.team = team
         self.type = type
         self.killable = killable
-
 
 
 bPawn = Piece('b', 'p', 'Pieces/bPawn.png')
@@ -45,11 +52,7 @@ wRook = Piece('w', 'r', 'Pieces/wRook.png')
 bBishop = Piece('b', 'b', 'Pieces/bBishop.png')
 wBishop = Piece('w', 'b', 'Pieces/wBishop.png')
 
-
-startingOrder = {(0, 0): pygame.image.load(wQueen.image), (1, 0): pygame.image.load(wKing.image)}
-
-
-
+startingOrder = {(0, 0): pg.image.load(wQueen.image), (1, 0): pg.image.load(wKing.image)}
 
 
 def draw_board(self):
@@ -65,25 +68,8 @@ def draw_board(self):
         for y in range(0, self.heigth, self.BLOCKSIZE):
             rect = pg.Rect(x, y, self.BLOCKSIZE, self.BLOCKSIZE)
             pg.draw.rect(screen, self.BLACK, rect, 1)
-            bg = pygame.image.load("Pieces/wKing.png");
-
-
-
-
-
+            bg = pg.image.load("Pieces/wKing.png");
 
     pg.display.update()
-
-=======
-    def draw_board(self):
-        pg.init()
-        screen = pg.display.set_mode((self.width, self.heigth))
-
-        screen.fill('#BA8C63')
-        for x in range(0, self.width, self.BLOCKSIZE):
-            for y in range(0, self.heigth, self.BLOCKSIZE):
-                rect = pg.Rect(x, y, self.BLOCKSIZE, self.BLOCKSIZE)
-                pg.draw.rect(screen, self.BLACK, rect, 1)
-
-        pg.display.update()
->>>>>>> a18b0669ce665c66e3bd0071b4799ad39b721ee1
+    
+'''
