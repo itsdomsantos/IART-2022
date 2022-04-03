@@ -34,6 +34,7 @@ class Piece:
             np.insert(aux, Position(self.position.x-1, self.position.y+1, boardSize, True))
             np.insert(aux, Position(self.position.x+1, self.position.y-1, boardSize, True))
             np.insert(aux, Position(self.position.x-1, self.position.y+1, boardSize, True))
+            boardSize -=1
         return aux
 
     def rookAttacks(self, boardSize):
@@ -43,6 +44,7 @@ class Piece:
             np.insert(aux, Position(self.position.x-1, self.position.y, boardSize, True))
             np.insert(aux, Position(self.position.x, self.position.y-1, boardSize, True))
             np.insert(aux, Position(self.position.x, self.position.y+1, boardSize, True))
+            boardSize -=1
         return aux
 
     def queenAttacks(self, boardSize):
