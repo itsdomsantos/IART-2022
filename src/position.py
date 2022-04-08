@@ -1,9 +1,11 @@
 
 class Position:
-    def __init__(self, posX, posY, boardSize, attacked = False):
-        if posX <= boardSize and posX >= 0 and posY <= boardSize and posY >= 0:
+    def __init__(self, posX, posY, boardSize):
             self.x = posX
             self.y = posY
-            self.attacked = attacked
 
-    
+    def getX(self):
+        return self.x
+
+    def getY(self):
+        return self.y
