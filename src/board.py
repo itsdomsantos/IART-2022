@@ -11,6 +11,8 @@ class Board:
         self.board = [['0' for col in range(self.size)] for row in range(self.size)]
         self.board[0][self.size - 1] = 'f'
         self.board[self.size - 1][0] = 's'
+        self.actualY = 0;
+        self.actualX = 0;
         lineIndex = 0
 
         for line in f:
@@ -24,8 +26,27 @@ class Board:
             lineIndex += 1
         f.close()
 
+    def processInput(self, value):
+        if value == "w" :
+            self.actualY -= 1
+            self.add_snake_piece(self, self.actualX, self.actualY)
+        if value == "s" and self.actualY+1<self.size:
+            self.actualY += 1
+        self.add_snake_piece(self, self.actualX, self.actualY)
+        if value == "d" and self.actualX+1 > self.size:
+            self.actualX += 1
+            self.add_snake_piece(self, self.actualX, self.actualY)
+        if value == "a" and self.actualX > 0:
+            self.actualX -= 1
+            self.add_snake_piece(self, self.actualX, self.actualY)
+        else:
+            print("Invalid Input")
+
     def add_snake_piece(self, x, y):
-        self.board[-(y + 1)][x] = '1'
+        if self.moveAllowed(x, y):
+            self.board[y][x] = '1'
+        else:
+            print(" Move not allowed")
 
     def posAttacked(self, x, y, char):
         if char == 'p':
