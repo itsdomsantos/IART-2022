@@ -1,26 +1,32 @@
-from src.position import Position
 import numpy as np
+from numpy.oldnumeric.alter_code1 import char
+
+from piece import Piece
 
 
 class Board:
     def __init__(self, file):
         self.pieces = {}
-        f = open(file, 'r')
+        f = open(file, 'rb')
         self.size = int(f.read(1))
         self.board = [['0' for col in range(self.size)] for row in range(self.size)]
         self.board[0][self.size - 1] = 'f'
         self.board[self.size - 1][0] = 's'
+        lineIndex  = 0
+
         for line in f:
-            char = f.read(1)
-            x = int(f.read(1))
-            y = int(f.read(1))
-            #self.pieces = self.posAttacked(x, y, char)
-            #print(self.pieces[0])
-            #self.pieces[-(y + 1), x].append(self.posAttacked(x, y, char))
-            self.pieces[x, y] = self.posAttacked(x, y, char)
-            ##print(self.pieces) -----> funciona
-            self.board[-(y + 1)][x] = char
+            split = line.split()
+            if lineIndex != 0:
+                type = split[0]
+                xPos = int(split[1])
+                yPos = int(split[2])
+                self.board[yPos-1][xPos-1] = type
+            lineIndex+=1
+
+            #self.pieces[x, y] = self.posAttacked(x, y, char)
+            #self.board[-(y + 1)][x] = char
         f.close()
+
 
     def add_snake_piece(self, x, y):
         self.board[-(y + 1)][x] = '1'
