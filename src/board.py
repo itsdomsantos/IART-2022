@@ -19,7 +19,7 @@ class Board:
                 type = split[0].decode("utf-8")
                 xPos = int(split[1])
                 yPos = int(split[2])
-                self.board[yPos - 1][xPos - 1] = type
+                self.board[yPos][xPos] = type
                 self.pieces[xPos, yPos] = self.posAttacked(xPos, yPos, type)
             lineIndex += 1
         f.close()
@@ -42,18 +42,18 @@ class Board:
             return self.checkPos(self.kingAttacks(x, y))
 
     def pawnAttacks(self, x, y):
-        return np.array([(x - 1, y + 1), (x + 1, y + 1)])
+        return np.array([(x - 1, y - 1), (x + 1, y - 1)])
 
     def knightAttacks(self, x, y):
-        aux = np.array([(x - 1, y + 2),
-                        (x + 1, y + 2),
-                        (x - 1, y - 2),
-                        (x + 1, y - 2),
-                        (x - 2, y + 1),
-                        (x - 2, y - 1),
-                        (x + 2, y + 1),
-                        (x + 2, y - 1)])
-        return aux
+        aux = [(x - 1, y + 2),
+               (x + 1, y + 2),
+               (x - 1, y - 2),
+               (x + 1, y - 2),
+               (x - 2, y + 1),
+               (x - 2, y - 1),
+               (x + 2, y + 1),
+               (x + 2, y - 1)]
+        return np.array(aux)
 
     def bishopAttacks(self, x, y):
         aux = []
