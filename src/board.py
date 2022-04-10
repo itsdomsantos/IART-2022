@@ -1,5 +1,4 @@
 import numpy as np
-from numpy.oldnumeric.alter_code1 import char
 
 from piece import Piece
 
@@ -12,21 +11,18 @@ class Board:
         self.board = [['0' for col in range(self.size)] for row in range(self.size)]
         self.board[0][self.size - 1] = 'f'
         self.board[self.size - 1][0] = 's'
-        lineIndex  = 0
+        lineIndex = 0
 
         for line in f:
             split = line.split()
             if lineIndex != 0:
-                type = split[0]
+                type = split[0].decode("utf-8")
                 xPos = int(split[1])
                 yPos = int(split[2])
-                self.board[yPos-1][xPos-1] = type
-            lineIndex+=1
-
-            #self.pieces[x, y] = self.posAttacked(x, y, char)
-            #self.board[-(y + 1)][x] = char
+                self.board[yPos - 1][xPos - 1] = type
+                self.pieces[xPos, yPos] = self.posAttacked(xPos, yPos, type)
+            lineIndex += 1
         f.close()
-
 
     def add_snake_piece(self, x, y):
         self.board[-(y + 1)][x] = '1'
@@ -34,7 +30,7 @@ class Board:
     def posAttacked(self, x, y, char):
         if char == 'p':
             return self.checkPos(self.pawnAttacks(x, y))
-        elif char == 'k':
+        elif char == 'n':
             return self.checkPos(self.knightAttacks(x, y))
         elif char == 'b':
             return self.checkPos(self.bishopAttacks(x, y))
@@ -42,23 +38,22 @@ class Board:
             return self.checkPos(self.rookAttacks(x, y))
         elif char == 'q':
             return self.queenAttacks(x, y)
-        elif char == 'K':
+        elif char == 'k':
             return self.checkPos(self.kingAttacks(x, y))
 
     def pawnAttacks(self, x, y):
-        return np.array([(x-1, y+1), (x+1, y+1)])
+        return np.array([(x - 1, y + 1), (x + 1, y + 1)])
 
     def knightAttacks(self, x, y):
-       aux = np.array([(x - 1, y + 2),
-                         (x + 1, y + 2),
-                         (x - 1, y - 2),
-                         (x + 1, y - 2),
-                         (x - 2, y + 1),
-                         (x - 2, y - 1),
-                         (x + 2, y + 1),
-                         (x + 2, y - 1)])
-       return aux
-
+        aux = np.array([(x - 1, y + 2),
+                        (x + 1, y + 2),
+                        (x - 1, y - 2),
+                        (x + 1, y - 2),
+                        (x - 2, y + 1),
+                        (x - 2, y - 1),
+                        (x + 2, y + 1),
+                        (x + 2, y - 1)])
+        return aux
 
     def bishopAttacks(self, x, y):
         aux = []
