@@ -11,7 +11,7 @@ class Board:
         self.board = [['0' for col in range(self.size)] for row in range(self.size)]
         self.board[0][self.size - 1] = 'f'
         self.board[self.size - 1][0] = 's'
-        self.actualY = 0;
+        self.actualY = self.size - 1;
         self.actualX = 0;
         lineIndex = 0
 
@@ -27,24 +27,22 @@ class Board:
         f.close()
 
     def processInput(self, value):
-        if value == "w" :
-            self.actualY -= 1
-            self.add_snake_piece(self, self.actualX, self.actualY)
-        if value == "s" and self.actualY+1<self.size:
-            self.actualY += 1
-        self.add_snake_piece(self, self.actualX, self.actualY)
-        if value == "d" and self.actualX+1 > self.size:
-            self.actualX += 1
-            self.add_snake_piece(self, self.actualX, self.actualY)
-        if value == "a" and self.actualX > 0:
-            self.actualX -= 1
-            self.add_snake_piece(self, self.actualX, self.actualY)
+        if value == "w":
+            self.addSnakePiece(self.actualX, self.actualY-1)
+        elif value == "s":
+            self.addSnakePiece(self.actualX, self.actualY+1)
+        elif value == "d":
+            self.addSnakePiece(self.actualX+1, self.actualY)
+        elif value == "a":
+            self.addSnakePiece(self.actualX-1, self.actualY)
         else:
             print("Invalid Input")
 
-    def add_snake_piece(self, x, y):
+    def addSnakePiece(self, x, y):
         if self.moveAllowed(x, y):
             self.board[y][x] = '1'
+            self.actualX=x
+            self.actualY=y
         else:
             print(" Move not allowed")
 
@@ -121,3 +119,19 @@ class Board:
 
         print("##########################")
         return aux
+
+    def moveAllowed(self, x, y):
+        if x < 0 or x >= self.size or y < 0 or y >= self.size:
+            return False
+        if self.board[y][x] == 'f':
+            print("Path completed")
+            return True
+        if self.board[y][x] != '0':
+            return False
+
+        return True
+
+    def printBoard(self):
+        a = np.array(self.board)
+        for line in a:
+            print('  '.join(map(str, line)))
