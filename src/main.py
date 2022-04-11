@@ -1,16 +1,14 @@
 import board
+from snake import Snake
 import numpy as np
 
-
-
-
 def main():
-    gameIsOn = True
-    game = board.Board("level1.txt")
-    while gameIsOn == True:
+    snake = Snake()
+    game = board.Board("level1.txt", snake)
+    while game.gameIsOn:
         game.printBoard()
         value = str(input())
-        if (value == "w" or value == "s" or value == "a" or value == "d"):
+        if value == "w" or value == "s" or value == "a" or value == "d":
             game.processInput(value)
 
 

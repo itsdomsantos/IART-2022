@@ -1,18 +1,21 @@
 import numpy as np
 
-from piece import Piece
-
 
 class Board:
-    def __init__(self, file):
+    def __init__(self, file, snake):
+        self.gameIsOn = True
         self.pieces = {}
+        self.openLevel(file)
+        self.snake = snake
+
+    def openLevel(self, file):
         f = open(file, 'rb')
         self.size = int(f.read(1))
         self.board = [['0' for col in range(self.size)] for row in range(self.size)]
         self.board[0][self.size - 1] = 'f'
         self.board[self.size - 1][0] = 's'
-        self.actualY = self.size - 1;
-        self.actualX = 0;
+        self.actualY = self.size - 1
+        self.actualX = 0
         lineIndex = 0
 
         for line in f:
@@ -28,21 +31,41 @@ class Board:
 
     def processInput(self, value):
         if value == "w":
-            self.addSnakePiece(self.actualX, self.actualY-1)
+            if self.snake.horizontal:
+                if self.checkDiagonal(self.actualX, self.actualY - 1):
+                    self.addSnakePiece(self.actualX, self.actualY - 1)
+                    self.snake.horizontal = False
+            else:
+                self.addSnakePiece(self.actualX, self.actualY - 1)
         elif value == "s":
-            self.addSnakePiece(self.actualX, self.actualY+1)
+            if self.snake.horizontal:
+                if self.checkDiagonal(self.actualX, self.actualY + 1):
+                    self.addSnakePiece(self.actualX, self.actualY + 1)
+                    self.snake.horizontal = False
+            else:
+                self.addSnakePiece(self.actualX, self.actualY + 1)
         elif value == "d":
-            self.addSnakePiece(self.actualX+1, self.actualY)
+            if not self.snake.horizontal:
+                if self.checkDiagonal(self.actualX + 1, self.actualY):
+                    self.addSnakePiece(self.actualX + 1, self.actualY)
+                    self.snake.horizontal = True
+            else:
+                    self.addSnakePiece(self.actualX + 1, self.actualY)
         elif value == "a":
-            self.addSnakePiece(self.actualX-1, self.actualY)
+            if not self.snake.horizontal:
+                if self.checkDiagonal(self.actualX - 1, self.actualY):
+                    self.addSnakePiece(self.actualX - 1, self.actualY)
+                    self.snake.horizontal = True
+            else:
+                    self.addSnakePiece(self.actualX - 1, self.actualY)
         else:
             print("Invalid Input")
 
     def addSnakePiece(self, x, y):
         if self.moveAllowed(x, y):
             self.board[y][x] = '1'
-            self.actualX=x
-            self.actualY=y
+            self.actualX = x
+            self.actualY = y
         else:
             print(" Move not allowed")
 
@@ -125,6 +148,7 @@ class Board:
             return False
         if self.board[y][x] == 'f':
             print("Path completed")
+            self.gameIsOn = False
             return True
         if self.board[y][x] != '0':
             return False
@@ -135,3 +159,28 @@ class Board:
         a = np.array(self.board)
         for line in a:
             print('  '.join(map(str, line)))
+
+    def checkDiagonal(self, x, y):
+        if self.checkSize(x + 1, y - 1) and self.checkSize(x - 1, y + 1):
+            if self.board[y - 1][x + 1] == '1' or self.board[y + 1][x - 1] == '1' or self.checkPiece(x+1, y-1) or self.checkPiece(x-1, y+1):
+                return True
+            else:
+                print("Move not allowed")
+                return False
+        else:
+            print("Move not allowed")
+            print("TESTE")
+            return False
+        return True
+
+    def checkSize(self, x, y):
+        if self.size - 1 >= x >= 0 and self.size - 1 >= y >= 0:
+            return True
+        return False
+
+
+    def checkPiece(self, x, y):
+        if self.board[y][x] == 'p' or self.board[y][x] == 'n' or self.board[y][x] == 'b' or self.board[y][x] == 'r' or self.board[y][x] == 'q' or self.board[y][x] == 'k':
+            return True
+
+        return False
