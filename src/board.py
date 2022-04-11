@@ -1,10 +1,11 @@
 import numpy as np
+import piece
 
 
 class Board:
     def __init__(self, file, snake):
         self.gameIsOn = True
-        self.pieces = {}
+        self.chess_pieces = []
         self.openLevel(file)
         self.snake = snake
 
@@ -25,8 +26,9 @@ class Board:
                 xPos = int(split[1])
                 yPos = int(split[2])
                 self.board[yPos][xPos] = type
-                self.pieces[xPos, yPos] = self.posAttacked(xPos, yPos, type)
+                self.chess_pieces.append(piece.Pieces(type, xPos, yPos, self.posAttacked(xPos, yPos, type)))
             lineIndex += 1
+        self.updateAttacks(0, self.size - 1)
         f.close()
 
     def processInput(self, value):
@@ -50,14 +52,14 @@ class Board:
                     self.addSnakePiece(self.actualX + 1, self.actualY)
                     self.snake.horizontal = True
             else:
-                    self.addSnakePiece(self.actualX + 1, self.actualY)
+                self.addSnakePiece(self.actualX + 1, self.actualY)
         elif value == "a":
             if not self.snake.horizontal:
                 if self.checkDiagonal(self.actualX - 1, self.actualY):
                     self.addSnakePiece(self.actualX - 1, self.actualY)
                     self.snake.horizontal = True
             else:
-                    self.addSnakePiece(self.actualX - 1, self.actualY)
+                self.addSnakePiece(self.actualX - 1, self.actualY)
         else:
             print("Invalid Input")
 
@@ -66,6 +68,7 @@ class Board:
             self.board[y][x] = '1'
             self.actualX = x
             self.actualY = y
+            self.updateAttacks(x, y)
         else:
             print(" Move not allowed")
 
@@ -144,7 +147,7 @@ class Board:
         return aux
 
     def moveAllowed(self, x, y):
-        if x < 0 or x >= self.size or y < 0 or y >= self.size:
+        if not self.checkSize(x, y):
             return False
         if self.board[y][x] == 'f':
             print("Path completed")
@@ -162,7 +165,9 @@ class Board:
 
     def checkDiagonal(self, x, y):
         if self.checkSize(x + 1, y - 1) and self.checkSize(x - 1, y + 1):
-            if self.board[y - 1][x + 1] == '1' or self.board[y + 1][x - 1] == '1' or self.checkPiece(x+1, y-1) or self.checkPiece(x-1, y+1):
+            if self.board[y - 1][x + 1] == '1' or self.board[y + 1][x - 1] == '1' or self.checkPiece(x + 1,
+                                                                                                     y - 1) or self.checkPiece(
+                x - 1, y + 1):
                 return True
             else:
                 print("Move not allowed")
@@ -176,9 +181,21 @@ class Board:
             return True
         return False
 
-
     def checkPiece(self, x, y):
-        if self.board[y][x] == 'p' or self.board[y][x] == 'n' or self.board[y][x] == 'b' or self.board[y][x] == 'r' or self.board[y][x] == 'q' or self.board[y][x] == 'k':
+        if self.board[y][x] == 'p' or self.board[y][x] == 'n' or self.board[y][x] == 'b' or self.board[y][x] == 'r' or \
+                self.board[y][x] == 'q' or self.board[y][x] == 'k':
             return True
 
         return False
+
+    def updateAttacks(self, x, y):
+        for cp in self.chess_pieces:
+            for pos in cp.positions_attacked:
+                if np.array_equal(np.array([x, y]), pos):
+                    cp.attacks += 1
+
+    def checkSum(self):
+        temp = []
+        for x in self.chess_pieces:
+            temp.append(x.attacks)
+        return all(element == temp[0] for element in temp)
