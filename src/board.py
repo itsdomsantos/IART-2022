@@ -26,9 +26,11 @@ class Board:
                 xPos = int(split[1])
                 yPos = int(split[2])
                 self.board[yPos][xPos] = type
-                self.chess_pieces.append(piece.Pieces(type, xPos, yPos, self.posAttacked(xPos, yPos, type)))
+                self.chess_pieces.append(piece.Pieces(type, xPos, yPos))
             lineIndex += 1
         self.updateAttacks(0, self.size - 1)
+        for x in self.chess_pieces:
+            x.define_attacks(self.posAttacked(x.position[0], x.position[1], x.type))
         f.close()
 
     # def processInput(self, value):
@@ -137,7 +139,6 @@ class Board:
         else:
             print("Invalid Input")
 
-
     def addSnakePiece(self, x, y):
         if self.moveAllowed(x, y):
             self.board[y][x] = '1'
@@ -157,7 +158,7 @@ class Board:
         elif char == 'r':
             return self.checkPos(self.rookAttacks(x, y))
         elif char == 'q':
-            return self.queenAttacks(x, y)
+            return self.checkPos(self.queenAttacks(x, y))
         elif char == 'k':
             return self.checkPos(self.kingAttacks(x, y))
 
@@ -177,25 +178,73 @@ class Board:
 
     def bishopAttacks(self, x, y):
         aux = []
+        tr_flag = 1
+        tl_flag = 1
+        br_flag = 1
+        bl_flag = 1
         cont = 1
         while cont < self.size:
-            aux.append((x + cont, y + cont))
-            aux.append((x + cont, y - cont))
-            aux.append((x - cont, y + cont))
-            aux.append((x - cont, y - cont))
+            if br_flag:
+                aux.append((x + cont, y + cont))
+                for cp in self.chess_pieces:
+                    if cp.position == (x + cont, y + cont):
+                        br_flag = 0
+                        break
+            if tr_flag:
+                aux.append((x + cont, y - cont))
+                for cp in self.chess_pieces:
+                    if cp.position == (x + cont, y - cont):
+                        tr_flag = 0
+                        break
+            if bl_flag:
+                aux.append((x - cont, y + cont))
+                for cp in self.chess_pieces:
+                    if cp.position == (x - cont, y + cont):
+                        bl_flag = 0
+                        break
+            if tl_flag:
+                aux.append((x - cont, y - cont))
+                for cp in self.chess_pieces:
+                    if cp.position == (x - cont, y - cont):
+                        tl_flag = 0
+                        break
             cont += 1
-        return self.checkPos(np.array(aux))
+        return np.array(aux)
 
     def rookAttacks(self, x, y):
         aux = []
+        right_flag = 1
+        left_flag = 1
+        up_flag = 1
+        down_flag = 1
         cont = 1
         while cont < self.size:
-            aux.append((x + cont, y))
-            aux.append((x - cont, y))
-            aux.append((x, y - cont))
-            aux.append((x, y + cont))
+            if right_flag:
+                aux.append((x + cont, y))
+                for cp in self.chess_pieces:
+                    if cp.position == (x+cont, y):
+                        right_flag = 0
+                        break
+            if left_flag:
+                aux.append((x - cont, y))
+                for cp in self.chess_pieces:
+                    if cp.position == (x-cont, y):
+                        left_flag = 0
+                        break
+            if up_flag:
+                aux.append((x, y - cont))
+                for cp in self.chess_pieces:
+                    if cp.position == (x, y-cont):
+                        up_flag = 0
+                        break
+            if down_flag:
+                aux.append((x, y + cont))
+                for cp in self.chess_pieces:
+                    if cp.position == (x, y+cont):
+                        down_flag = 0
+                        break
             cont += 1
-        return self.checkPos(np.array(aux))
+        return np.array(aux)
 
     def queenAttacks(self, x, y):
         return np.concatenate((self.rookAttacks(x, y), self.bishopAttacks(x, y)), axis=0)
@@ -237,6 +286,7 @@ class Board:
         a = np.array(self.board)
         for line in a:
             print('  '.join(map(str, line)))
+
     #
     # def checkRightDiagonal(self, x, y):
     #     if self.checkSize(x + 1, y - 1) and self.checkSize(x - 1, y + 1):
@@ -261,29 +311,29 @@ class Board:
     #         return True
 
     def checkDownRightDiagonal(self, x, y):
-        if self.checkSize(x+1, y+1):
-            if self.board[y+1][x+1] == '1':
+        if self.checkSize(x + 1, y + 1):
+            if self.board[y + 1][x + 1] == '1':
                 print("Move not allowed!")
                 return False
         return True
 
     def checkDownLeftDiagonal(self, x, y):
-        if self.checkSize(x-1, y+1):
-            if self.board[y+1][x-1] == '1':
+        if self.checkSize(x - 1, y + 1):
+            if self.board[y + 1][x - 1] == '1':
                 print("Move not allowed!")
                 return False
         return True
 
     def checkUpLeftDiagonal(self, x, y):
-        if self.checkSize(x-1, y-1):
-            if self.board[y-1][x-1] == '1':
+        if self.checkSize(x - 1, y - 1):
+            if self.board[y - 1][x - 1] == '1':
                 print("Move not allowed!")
                 return False
         return True
 
     def checkUpRightDiagonal(self, x, y):
-        if self.checkSize(x+1, y-1):
-            if self.board[y-1][x+1] == '1':
+        if self.checkSize(x + 1, y - 1):
+            if self.board[y - 1][x + 1] == '1':
                 print("Move not allowed!")
                 return False
         return True
