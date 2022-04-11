@@ -31,14 +31,68 @@ class Board:
         self.updateAttacks(0, self.size - 1)
         f.close()
 
+    # def processInput(self, value):
+    #     print(self.snake.prevMov)
+    #     if value == "w":
+    #         if self.snake.prevMov == 'd':
+    #             if self.checkRightDiagonal(self.actualX, self.actualY - 1):
+    #                 self.addSnakePiece(self.actualX, self.actualY - 1)
+    #                 self.snake.prevMov = 'w'
+    #         elif self.snake.prevMov == 'a':
+    #             if self.checkLeftDiagonal(self.actualX, self.actualY - 1):
+    #                 self.addSnakePiece(self.actualX, self.actualY - 1)
+    #                 self.snake.prevMov = 'w'
+    #         else:
+    #             self.addSnakePiece(self.actualX, self.actualY - 1)
+    #             self.snake.prevMov = 'w'
+    #     elif value == "s":
+    #         if self.snake.prevMov == 'd':
+    #             if self.checkLeftDiagonal(self.actualX, self.actualY + 1):
+    #                 self.addSnakePiece(self.actualX, self.actualY + 1)
+    #                 self.snake.prevMov = 's'
+    #         elif self.snake.prevMov == 'a':
+    #             if self.checkRightDiagonal(self.actualX, self.actualY + 1):
+    #                 self.addSnakePiece(self.actualX, self.actualY + 1)
+    #                 self.snake.prevMov = 's'
+    #         else:
+    #             self.addSnakePiece(self.actualX, self.actualY + 1)
+    #             self.snake.prevMov = 's'
+    #     elif value == "d":
+    #         if self.snake.prevMov == 'w':
+    #             if self.checkRightDiagonal(self.actualX + 1, self.actualY):
+    #                 self.addSnakePiece(self.actualX + 1, self.actualY)
+    #                 self.snake.prevMov = 'd'
+    #         elif self.snake.prevMov == 's':
+    #             if self.checkLeftDiagonal(self.actualX + 1, self.actualY):
+    #                 self.addSnakePiece(self.actualX + 1, self.actualY)
+    #                 self.snake.prevMov = 'd'
+    #         else:
+    #             self.addSnakePiece(self.actualX + 1, self.actualY)
+    #             self.snake.prevMov = 'd'
+    #     elif value == "a":
+    #         if self.snake.prevMov == 'w':
+    #             if self.checkLeftDiagonal(self.actualX - 1, self.actualY):
+    #                 self.addSnakePiece(self.actualX - 1, self.actualY)
+    #                 self.snake.prevMov = 'a'
+    #         elif self.snake.prevMov == 's':
+    #             if self.checkRightDiagonal(self.actualX - 1, self.actualY):
+    #                 self.addSnakePiece(self.actualX - 1, self.actualY)
+    #                 self.snake.prevMov = 'a'
+    #         else:
+    #             self.addSnakePiece(self.actualX - 1, self.actualY)
+    #             self.snake.prevMov = 'a'
+    #     else:
+    #         print("Invalid Input")
+
     def processInput(self, value):
+        print(self.snake.prevMov)
         if value == "w":
             if self.snake.prevMov == 'd':
-                if self.checkRightDiagonal(self.actualX, self.actualY - 1):
+                if self.checkDownRightDiagonal(self.actualX, self.actualY - 1):
                     self.addSnakePiece(self.actualX, self.actualY - 1)
                     self.snake.prevMov = 'w'
             elif self.snake.prevMov == 'a':
-                if self.checkLeftDiagonal(self.actualX, self.actualY - 1):
+                if self.checkDownLeftDiagonal(self.actualX, self.actualY - 1):
                     self.addSnakePiece(self.actualX, self.actualY - 1)
                     self.snake.prevMov = 'w'
             else:
@@ -46,11 +100,11 @@ class Board:
                 self.snake.prevMov = 'w'
         elif value == "s":
             if self.snake.prevMov == 'd':
-                if self.checkLeftDiagonal(self.actualX, self.actualY + 1):
+                if self.checkUpRightDiagonal(self.actualX, self.actualY + 1):
                     self.addSnakePiece(self.actualX, self.actualY + 1)
                     self.snake.prevMov = 's'
             elif self.snake.prevMov == 'a':
-                if self.checkRightDiagonal(self.actualX, self.actualY + 1):
+                if self.checkUpLeftDiagonal(self.actualX, self.actualY + 1):
                     self.addSnakePiece(self.actualX, self.actualY + 1)
                     self.snake.prevMov = 's'
             else:
@@ -58,11 +112,11 @@ class Board:
                 self.snake.prevMov = 's'
         elif value == "d":
             if self.snake.prevMov == 'w':
-                if self.checkRightDiagonal(self.actualX + 1, self.actualY):
+                if self.checkUpLeftDiagonal(self.actualX + 1, self.actualY):
                     self.addSnakePiece(self.actualX + 1, self.actualY)
                     self.snake.prevMov = 'd'
             elif self.snake.prevMov == 's':
-                if self.checkLeftDiagonal(self.actualX + 1, self.actualY):
+                if self.checkUpRightDiagonal(self.actualX + 1, self.actualY):
                     self.addSnakePiece(self.actualX + 1, self.actualY)
                     self.snake.prevMov = 'd'
             else:
@@ -70,18 +124,19 @@ class Board:
                 self.snake.prevMov = 'd'
         elif value == "a":
             if self.snake.prevMov == 'w':
-                if self.checkLeftDiagonal(self.actualX - 1, self.actualY):
+                if self.checkDownLeftDiagonal(self.actualX - 1, self.actualY):
                     self.addSnakePiece(self.actualX - 1, self.actualY)
-                    self.snake.prevMov = True
+                    self.snake.prevMov = 'a'
             elif self.snake.prevMov == 's':
-                if self.checkRightDiagonal(self.actualX - 1, self.actualY):
+                if self.checkUpLeftDiagonal(self.actualX - 1, self.actualY):
                     self.addSnakePiece(self.actualX - 1, self.actualY)
-                    self.snake.prevMov = 'd'
+                    self.snake.prevMov = 'a'
             else:
                 self.addSnakePiece(self.actualX - 1, self.actualY)
                 self.snake.prevMov = 'a'
         else:
             print("Invalid Input")
+
 
     def addSnakePiece(self, x, y):
         if self.moveAllowed(x, y):
@@ -182,28 +237,56 @@ class Board:
         a = np.array(self.board)
         for line in a:
             print('  '.join(map(str, line)))
+    #
+    # def checkRightDiagonal(self, x, y):
+    #     if self.checkSize(x + 1, y - 1) and self.checkSize(x - 1, y + 1):
+    #         if self.board[y - 1][x + 1] == '1' or self.board[y + 1][x - 1] == '1' or self.checkPiece(x + 1,y - 1) or self.checkPiece(x - 1, y + 1):
+    #             return True
+    #         else:
+    #             print("Move not allowed")
+    #             return False
+    #     else:
+    #         print("TESTE")
+    #         return True
+    #
+    # def checkLeftDiagonal(self, x, y):
+    #     if self.checkSize(x - 1, y - 1) and self.checkSize(x + 1, y + 1):
+    #         if self.board[y - 1][x - 1] == '1' or self.board[y + 1][x + 1] == '1' or self.checkPiece(x - 1,y - 1) or self.checkPiece(x + 1, y + 1):
+    #             return True
+    #         else:
+    #             print("Move not allowed")
+    #             return False
+    #     else:
+    #         print("TESTE")
+    #         return True
 
-    def checkRightDiagonal(self, x, y):
-        if self.checkSize(x + 1, y - 1) and self.checkSize(x - 1, y + 1):
-            if self.board[y - 1][x + 1] == '1' or self.board[y + 1][x - 1] == '1' or self.checkPiece(x + 1,y - 1) or self.checkPiece(x - 1, y + 1):
-                return True
-            else:
-                print("Move not allowed")
+    def checkDownRightDiagonal(self, x, y):
+        if self.checkSize(x+1, y+1):
+            if self.board[y+1][x+1] == '1':
+                print("Move not allowed!")
                 return False
-        else:
-            print("TESTE")
-            return True
+        return True
 
-    def checkLeftDiagonal(self, x, y):
-        if self.checkSize(x - 1, y - 1) and self.checkSize(x + 1, y + 1):
-            if self.board[y - 1][x - 1] == '1' or self.board[y + 1][x + 1] == '1' or self.checkPiece(x - 1,y - 1) or self.checkPiece(x + 1, y + 1):
-                return True
-            else:
-                print("Move not allowed")
+    def checkDownLeftDiagonal(self, x, y):
+        if self.checkSize(x-1, y+1):
+            if self.board[y+1][x-1] == '1':
+                print("Move not allowed!")
                 return False
-        else:
-            print("TESTE")
-            return True
+        return True
+
+    def checkUpLeftDiagonal(self, x, y):
+        if self.checkSize(x-1, y-1):
+            if self.board[y-1][x-1] == '1':
+                print("Move not allowed!")
+                return False
+        return True
+
+    def checkUpRightDiagonal(self, x, y):
+        if self.checkSize(x+1, y-1):
+            if self.board[y-1][x+1] == '1':
+                print("Move not allowed!")
+                return False
+        return True
 
     def checkSize(self, x, y):
         if self.size - 1 >= x >= 0 and self.size - 1 >= y >= 0:
