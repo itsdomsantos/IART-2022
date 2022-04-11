@@ -89,6 +89,9 @@ class Board:
     def processInput(self, value):
         print(self.snake.prevMov)
         if value == "w":
+            if not self.checkHorizontalTouch(self.actualX, self.actualY - 1):
+                print("Move Not Allowed")
+                return
             if self.snake.prevMov == 'd':
                 if self.checkDownRightDiagonal(self.actualX, self.actualY - 1):
                     self.addSnakePiece(self.actualX, self.actualY - 1)
@@ -101,6 +104,9 @@ class Board:
                 self.addSnakePiece(self.actualX, self.actualY - 1)
                 self.snake.prevMov = 'w'
         elif value == "s":
+            if not self.checkHorizontalTouch(self.actualX, self.actualY + 1):
+                print("Move Not Allowed")
+                return
             if self.snake.prevMov == 'd':
                 if self.checkUpRightDiagonal(self.actualX, self.actualY + 1):
                     self.addSnakePiece(self.actualX, self.actualY + 1)
@@ -113,6 +119,9 @@ class Board:
                 self.addSnakePiece(self.actualX, self.actualY + 1)
                 self.snake.prevMov = 's'
         elif value == "d":
+            if not self.checkVerticalTouch(self.actualX + 1, self.actualY):
+                print("Move Not Allowed")
+                return
             if self.snake.prevMov == 'w':
                 if self.checkUpLeftDiagonal(self.actualX + 1, self.actualY):
                     self.addSnakePiece(self.actualX + 1, self.actualY)
@@ -125,6 +134,9 @@ class Board:
                 self.addSnakePiece(self.actualX + 1, self.actualY)
                 self.snake.prevMov = 'd'
         elif value == "a":
+            if not self.checkVerticalTouch(self.actualX - 1, self.actualY):
+                print("Move Not Allowed")
+                return
             if self.snake.prevMov == 'w':
                 if self.checkDownLeftDiagonal(self.actualX - 1, self.actualY):
                     self.addSnakePiece(self.actualX - 1, self.actualY)
@@ -222,25 +234,25 @@ class Board:
             if right_flag:
                 aux.append((x + cont, y))
                 for cp in self.chess_pieces:
-                    if cp.position == (x+cont, y):
+                    if cp.position == (x + cont, y):
                         right_flag = 0
                         break
             if left_flag:
                 aux.append((x - cont, y))
                 for cp in self.chess_pieces:
-                    if cp.position == (x-cont, y):
+                    if cp.position == (x - cont, y):
                         left_flag = 0
                         break
             if up_flag:
                 aux.append((x, y - cont))
                 for cp in self.chess_pieces:
-                    if cp.position == (x, y-cont):
+                    if cp.position == (x, y - cont):
                         up_flag = 0
                         break
             if down_flag:
                 aux.append((x, y + cont))
                 for cp in self.chess_pieces:
-                    if cp.position == (x, y+cont):
+                    if cp.position == (x, y + cont):
                         down_flag = 0
                         break
             cont += 1
@@ -334,6 +346,28 @@ class Board:
     def checkUpRightDiagonal(self, x, y):
         if self.checkSize(x + 1, y - 1):
             if self.board[y - 1][x + 1] == '1':
+                print("Move not allowed!")
+                return False
+        return True
+
+    def checkVerticalTouch(self, x, y):
+        if self.checkSize(x, y - 1):
+            if self.board[y - 1][x] == '1':
+                print("Move not allowed!")
+                return False
+        if self.checkSize(x, y + 1):
+            if self.board[y + 1][x] == '1':
+                print("Move not allowed!")
+                return False
+        return True
+
+    def checkHorizontalTouch(self, x, y):
+        if self.checkSize(x - 1, y):
+            if self.board[y][x - 1] == '1':
+                print("Move not allowed!")
+                return False
+        if self.checkSize(x + 1, y):
+            if self.board[y][x + 1] == '1':
                 print("Move not allowed!")
                 return False
         return True
