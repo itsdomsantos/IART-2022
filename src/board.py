@@ -168,10 +168,8 @@ class Board:
                 print("Move not allowed")
                 return False
         else:
-            print("Move not allowed")
             print("TESTE")
-            return False
-        return True
+            return True
 
     def checkSize(self, x, y):
         if self.size - 1 >= x >= 0 and self.size - 1 >= y >= 0:
