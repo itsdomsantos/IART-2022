@@ -28,9 +28,9 @@ class Board:
                 self.board[yPos][xPos] = type
                 self.chess_pieces.append(piece.Pieces(type, xPos, yPos))
             lineIndex += 1
-        self.updateAttacks(0, self.size - 1)
         for x in self.chess_pieces:
             x.define_attacks(self.posAttacked(x.position[0], x.position[1], x.type))
+        self.updateAttacks(0, self.size - 1)
         f.close()
 
     # def processInput(self, value):
