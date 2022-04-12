@@ -175,7 +175,7 @@ class Board:
         print("##########################")
         return aux
 
-    def validInput(self,value):
+    def validInput(self, value):
         if value == "w":
             if not self.checkHorizontalTouch(self.actualX, self.actualY - 1):
                 return False
@@ -329,3 +329,6 @@ class Board:
         for x in self.chess_pieces:
             temp.append(x.attacks)
         return all(element == temp[0] for element in temp)
+
+    def manhattan_distance(self):
+        return abs((self.size - 1) - self.actualX) + abs(0 - self.actualY)

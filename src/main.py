@@ -8,6 +8,7 @@ def main():
     game = board.Board("level1.txt", snake)
     while game.gameIsOn:
         game.printBoard()
+        print(game.manhattan_distance())
         for x in game.chess_pieces:
             print(x.type, x.attacks)
         value = str(input())
