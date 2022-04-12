@@ -8,6 +8,7 @@ class Board:
         self.chess_pieces = []
         self.openLevel(file)
         self.snake = snake
+        self.cost = 0
 
     def openLevel(self, file):
         f = open(file, 'rb')
@@ -39,6 +40,7 @@ class Board:
             return False
         else:
             print("Move accepted")
+            self.cost += 1
             return True
 
     def addSnakePiece(self, x, y):
