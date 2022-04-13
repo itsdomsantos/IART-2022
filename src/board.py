@@ -34,8 +34,8 @@ class Board:
         self.updateAttacks(0, self.size - 1)
         f.close()
 
-    def processInput(self, value):
-        if not self.validInput(value):
+    def processInput(self, value, screen):
+        if not self.validInput(value, screen):
             print("Move not allowed")
             return False
         else:
@@ -43,12 +43,13 @@ class Board:
             self.cost += 1
             return True
 
-    def addSnakePiece(self, x, y):
+    def addSnakePiece(self, x, y, screen):
         if self.moveAllowed(x, y):
             self.board[y][x] = '1'
             self.actualX = x
             self.actualY = y
             self.updateAttacks(x, y)
+            screen.color_square(x, y)
             return True
         else:
             return False
@@ -175,22 +176,22 @@ class Board:
         print("##########################")
         return aux
 
-    def validInput(self, value):
+    def validInput(self, value, screen):
         if value == "w":
             if not self.checkHorizontalTouch(self.actualX, self.actualY - 1):
                 return False
             if self.snake.prevMov == 'd':
                 if self.checkDownRightDiagonal(self.actualX, self.actualY - 1):
-                    if self.addSnakePiece(self.actualX, self.actualY - 1):
+                    if self.addSnakePiece(self.actualX, self.actualY - 1, screen):
                         self.snake.prevMov = 'w'
                         return True
             elif self.snake.prevMov == 'a':
                 if self.checkDownLeftDiagonal(self.actualX, self.actualY - 1):
-                    if self.addSnakePiece(self.actualX, self.actualY - 1):
+                    if self.addSnakePiece(self.actualX, self.actualY - 1, screen):
                         self.snake.prevMov = 'w'
                         return True
             else:
-                if self.addSnakePiece(self.actualX, self.actualY - 1):
+                if self.addSnakePiece(self.actualX, self.actualY - 1, screen):
                     self.snake.prevMov = 'w'
                     return True
         elif value == "s":
@@ -198,16 +199,16 @@ class Board:
                 return False
             if self.snake.prevMov == 'd':
                 if self.checkUpRightDiagonal(self.actualX, self.actualY + 1):
-                    if self.addSnakePiece(self.actualX, self.actualY + 1):
+                    if self.addSnakePiece(self.actualX, self.actualY + 1, screen):
                         self.snake.prevMov = 's'
                         return True
             elif self.snake.prevMov == 'a':
                 if self.checkUpLeftDiagonal(self.actualX, self.actualY + 1):
-                    if self.addSnakePiece(self.actualX, self.actualY + 1):
+                    if self.addSnakePiece(self.actualX, self.actualY + 1, screen):
                         self.snake.prevMov = 's'
                         return True
             else:
-                if self.addSnakePiece(self.actualX, self.actualY + 1):
+                if self.addSnakePiece(self.actualX, self.actualY + 1, screen):
                     self.snake.prevMov = 's'
                     return True
         elif value == "d":
@@ -215,16 +216,16 @@ class Board:
                 return False
             if self.snake.prevMov == 'w':
                 if self.checkUpLeftDiagonal(self.actualX + 1, self.actualY):
-                    if self.addSnakePiece(self.actualX + 1, self.actualY):
+                    if self.addSnakePiece(self.actualX + 1, self.actualY, screen):
                         self.snake.prevMov = 'd'
                         return True
             elif self.snake.prevMov == 's':
                 if self.checkUpRightDiagonal(self.actualX + 1, self.actualY):
-                    if self.addSnakePiece(self.actualX + 1, self.actualY):
+                    if self.addSnakePiece(self.actualX + 1, self.actualY, screen):
                         self.snake.prevMov = 'd'
                         return True
             else:
-                if self.addSnakePiece(self.actualX + 1, self.actualY):
+                if self.addSnakePiece(self.actualX + 1, self.actualY, screen):
                     self.snake.prevMov = 'd'
                     return True
         elif value == "a":
@@ -232,16 +233,16 @@ class Board:
                 return False
             if self.snake.prevMov == 'w':
                 if self.checkDownLeftDiagonal(self.actualX - 1, self.actualY):
-                    if self.addSnakePiece(self.actualX - 1, self.actualY):
+                    if self.addSnakePiece(self.actualX - 1, self.actualY, screen):
                         self.snake.prevMov = 'a'
                         return True
             elif self.snake.prevMov == 's':
                 if self.checkUpLeftDiagonal(self.actualX - 1, self.actualY):
-                    if self.addSnakePiece(self.actualX - 1, self.actualY):
+                    if self.addSnakePiece(self.actualX - 1, self.actualY, screen):
                         self.snake.prevMov = 'a'
                         return True
             else:
-                if self.addSnakePiece(self.actualX - 1, self.actualY):
+                if self.addSnakePiece(self.actualX - 1, self.actualY, screen):
                     self.snake.prevMov = 'a'
                     return True
         else:
@@ -332,3 +333,15 @@ class Board:
 
     def manhattan_distance(self):
         return abs((self.size - 1) - self.actualX) + abs(0 - self.actualY)
+
+    def getInput(self, x, y):
+        if x == self.actualX - 1 and y == self.actualY:
+            return "a"
+        elif x == self.actualX + 1 and y == self.actualY:
+            return "d"
+        elif x == self.actualX and y == self.actualY - 1:
+            return "w"
+        elif x == self.actualX and y == self.actualY + 1:
+            return "s"
+        else:
+            return "0"

@@ -1,5 +1,10 @@
+import time
+
 import board
+import display
 from snake import Snake
+import pygame as pg
+import sys
 
 
 class Menu:
@@ -24,21 +29,39 @@ class Menu:
         level = self.level_menu(self)
         snake = Snake()
         game = board.Board("./levels/level" + level + ".txt", snake)
+
+        screen = display.Display(game.size)
+        screen.draw_board()
+        screen.color_square(0, game.size - 1)
+        screen.draw_chess_piece("s", (0, game.size - 1))
+        screen.draw_chess_piece("f", (game.size - 1, 0))
+        for x in game.chess_pieces:
+            screen.draw_chess_piece(x.type, x.position)
         while game.gameIsOn:
-            game.printBoard()
-            print(game.manhattan_distance())
-            for x in game.chess_pieces:
-                print(x.type, x.attacks)
-            value = str(input())
-            if value == "w" or value == "s" or value == "a" or value == "d":
-                game.processInput(value)
+            for event in pg.event.get():
+                if event.type == pg.QUIT or event.type == pg.K_ESCAPE:
+                    sys.exit()
+                if event.type == pg.MOUSEBUTTONDOWN:
+                    print(game.manhattan_distance())
+                    for x in game.chess_pieces:
+                        print(x.type, x.attacks)
+                    mouseX = event.pos[0]  # x
+                    mouseY = event.pos[1]  # y
+                    clicked_row = int(mouseX // screen.BLOCKSIZE)
+                    clicked_col = int(mouseY // screen.BLOCKSIZE)
+                    value = game.getInput(clicked_row, clicked_col)
+                    if value != "0":
+                        game.processInput(value, screen)
+                    print(clicked_col, clicked_row)
+        pg.display.update()
         if game.checkSum():
             print("All pieces attack an equal number of squares")
         else:
             print("Pieces have a different number of squares attacked")
         for x in game.chess_pieces:
             print(x.type, x.attacks)
-        self.main_menu(self)
+        time.sleep(5)
+        sys.exit()
 
     def ai_mode(self):
         print("Sorry this mode is not available at the moment")
