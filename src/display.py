@@ -22,18 +22,24 @@ class Display:
         self.begin = pg.image.load("./Pieces/s.png")
         self.end = pg.image.load("./Pieces/f.png")
 
-    def draw_board(self):
+    def init_board(self):
         pg.init()
         self.screen = pg.display.set_mode((self.width, self.heigth))
         self.screen.fill(self.WHITE)
-        for x in range(0, self.width, self.BLOCKSIZE):
-            for y in range(0, self.heigth, self.BLOCKSIZE):
-                rect = pg.Rect(x, y, self.BLOCKSIZE, self.BLOCKSIZE)
-                pg.draw.rect(self.screen, self.BLACK, rect, 1)
         pg.display.update()
 
-    def color_square(self, x, y):
-        pg.draw.rect(self.screen, self.GREEN,
+    def update_board(self, board):
+        for x in range(0, self.width, self.BLOCKSIZE):
+            for y in range(0, self.heigth, self.BLOCKSIZE):
+                if board[y//self.BLOCKSIZE][x//self.BLOCKSIZE] == "1":
+                    self.add_square(x//self.BLOCKSIZE, y//self.BLOCKSIZE)
+                else:
+                    rect = pg.Rect(x, y, self.BLOCKSIZE, self.BLOCKSIZE)
+                    pg.draw.rect(self.screen, self.BLACK, rect, 1)
+        pg.display.update()
+
+    def color_square(self, x, y,color):
+        pg.draw.rect(self.screen, color,
                      pg.Rect(x * self.BLOCKSIZE + 1, y * self.BLOCKSIZE + 1, self.BLOCKSIZE - 2, self.BLOCKSIZE - 2))
         pg.display.update()
 
@@ -60,3 +66,9 @@ class Display:
         pg.Surface.blit(self.screen, image, (position[0] * 100 + 21, position[1] * 100 + 21))
         pg.display.update()
 
+
+    def delete_square(self,x,y):
+        self.color_square(x, y, self.WHITE)
+
+    def add_square(self,x,y):
+        self.color_square(x, y, self.GREEN)

@@ -1,13 +1,14 @@
 import numpy as np
 import piece
+import snake
 
 
 class Board:
-    def __init__(self, file, snake):
+    def __init__(self, file):
         self.gameIsOn = True
         self.chess_pieces = []
+        self.snake = snake.Snake()
         self.openLevel(file)
-        self.snake = snake
         self.cost = 0
 
     def openLevel(self, file):
@@ -18,6 +19,7 @@ class Board:
         self.board[self.size - 1][0] = 's'
         self.actualY = self.size - 1
         self.actualX = 0
+        self.snake.update_path((self.actualX, self.actualY))
         lineIndex = 0
 
         for line in f:
@@ -34,8 +36,8 @@ class Board:
         self.updateAttacks(0, self.size - 1)
         f.close()
 
-    def processInput(self, value, screen):
-        if not self.validInput(value, screen):
+    def processInput(self, value):
+        if not self.validInput(value):
             print("Move not allowed")
             return False
         else:
@@ -43,13 +45,13 @@ class Board:
             self.cost += 1
             return True
 
-    def addSnakePiece(self, x, y, screen):
+    def addSnakePiece(self, x, y):
         if self.moveAllowed(x, y):
             self.board[y][x] = '1'
             self.actualX = x
             self.actualY = y
             self.updateAttacks(x, y)
-            screen.color_square(x, y)
+            self.snake.update_path((x, y))
             return True
         else:
             return False
@@ -176,22 +178,22 @@ class Board:
         print("##########################")
         return aux
 
-    def validInput(self, value, screen):
+    def validInput(self, value):
         if value == "w":
             if not self.checkHorizontalTouch(self.actualX, self.actualY - 1):
                 return False
             if self.snake.prevMov == 'd':
                 if self.checkDownRightDiagonal(self.actualX, self.actualY - 1):
-                    if self.addSnakePiece(self.actualX, self.actualY - 1, screen):
+                    if self.addSnakePiece(self.actualX, self.actualY - 1):
                         self.snake.prevMov = 'w'
                         return True
             elif self.snake.prevMov == 'a':
                 if self.checkDownLeftDiagonal(self.actualX, self.actualY - 1):
-                    if self.addSnakePiece(self.actualX, self.actualY - 1, screen):
+                    if self.addSnakePiece(self.actualX, self.actualY - 1):
                         self.snake.prevMov = 'w'
                         return True
             else:
-                if self.addSnakePiece(self.actualX, self.actualY - 1, screen):
+                if self.addSnakePiece(self.actualX, self.actualY - 1):
                     self.snake.prevMov = 'w'
                     return True
         elif value == "s":
@@ -199,16 +201,16 @@ class Board:
                 return False
             if self.snake.prevMov == 'd':
                 if self.checkUpRightDiagonal(self.actualX, self.actualY + 1):
-                    if self.addSnakePiece(self.actualX, self.actualY + 1, screen):
+                    if self.addSnakePiece(self.actualX, self.actualY + 1):
                         self.snake.prevMov = 's'
                         return True
             elif self.snake.prevMov == 'a':
                 if self.checkUpLeftDiagonal(self.actualX, self.actualY + 1):
-                    if self.addSnakePiece(self.actualX, self.actualY + 1, screen):
+                    if self.addSnakePiece(self.actualX, self.actualY + 1):
                         self.snake.prevMov = 's'
                         return True
             else:
-                if self.addSnakePiece(self.actualX, self.actualY + 1, screen):
+                if self.addSnakePiece(self.actualX, self.actualY + 1):
                     self.snake.prevMov = 's'
                     return True
         elif value == "d":
@@ -216,16 +218,16 @@ class Board:
                 return False
             if self.snake.prevMov == 'w':
                 if self.checkUpLeftDiagonal(self.actualX + 1, self.actualY):
-                    if self.addSnakePiece(self.actualX + 1, self.actualY, screen):
+                    if self.addSnakePiece(self.actualX + 1, self.actualY):
                         self.snake.prevMov = 'd'
                         return True
             elif self.snake.prevMov == 's':
                 if self.checkUpRightDiagonal(self.actualX + 1, self.actualY):
-                    if self.addSnakePiece(self.actualX + 1, self.actualY, screen):
+                    if self.addSnakePiece(self.actualX + 1, self.actualY):
                         self.snake.prevMov = 'd'
                         return True
             else:
-                if self.addSnakePiece(self.actualX + 1, self.actualY, screen):
+                if self.addSnakePiece(self.actualX + 1, self.actualY):
                     self.snake.prevMov = 'd'
                     return True
         elif value == "a":
@@ -233,16 +235,16 @@ class Board:
                 return False
             if self.snake.prevMov == 'w':
                 if self.checkDownLeftDiagonal(self.actualX - 1, self.actualY):
-                    if self.addSnakePiece(self.actualX - 1, self.actualY, screen):
+                    if self.addSnakePiece(self.actualX - 1, self.actualY):
                         self.snake.prevMov = 'a'
                         return True
             elif self.snake.prevMov == 's':
                 if self.checkUpLeftDiagonal(self.actualX - 1, self.actualY):
-                    if self.addSnakePiece(self.actualX - 1, self.actualY, screen):
+                    if self.addSnakePiece(self.actualX - 1, self.actualY):
                         self.snake.prevMov = 'a'
                         return True
             else:
-                if self.addSnakePiece(self.actualX - 1, self.actualY, screen):
+                if self.addSnakePiece(self.actualX - 1, self.actualY):
                     self.snake.prevMov = 'a'
                     return True
         else:
@@ -325,6 +327,12 @@ class Board:
                 if np.array_equal(np.array([x, y]), pos):
                     cp.attacks += 1
 
+    def deleteAttacks(self, x, y):
+        for cp in self.chess_pieces:
+            for pos in cp.positions_attacked:
+                if np.array_equal(np.array([x, y]), pos):
+                    cp.attacks -= 1
+
     def checkSum(self):
         temp = []
         for x in self.chess_pieces:
@@ -345,3 +353,11 @@ class Board:
             return "s"
         else:
             return "0"
+
+    def undoLastMovement(self):
+        self.deleteAttacks(self.actualX, self.actualY)
+        self.board[self.actualY][self.actualX] = "0"
+        self.snake.undo_last_movement()
+        self.actualX = self.snake.path[-1][0]
+        self.actualY = self.snake.path[-1][1]
+
