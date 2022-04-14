@@ -180,73 +180,17 @@ class Board:
 
     def validInput(self, value):
         if value == "w":
-            if not self.checkHorizontalTouch(self.actualX, self.actualY - 1):
-                return False
-            if self.snake.prevMov == 'd':
-                if self.checkDownRightDiagonal(self.actualX, self.actualY - 1):
-                    if self.addSnakePiece(self.actualX, self.actualY - 1):
-                        self.snake.prevMov = 'w'
-                        return True
-            elif self.snake.prevMov == 'a':
-                if self.checkDownLeftDiagonal(self.actualX, self.actualY - 1):
-                    if self.addSnakePiece(self.actualX, self.actualY - 1):
-                        self.snake.prevMov = 'w'
-                        return True
-            else:
-                if self.addSnakePiece(self.actualX, self.actualY - 1):
-                    self.snake.prevMov = 'w'
-                    return True
+            if self.checkTouchesUp():
+                return self.addSnakePiece(self.actualX, self.actualY - 1)
         elif value == "s":
-            if not self.checkHorizontalTouch(self.actualX, self.actualY + 1):
-                return False
-            if self.snake.prevMov == 'd':
-                if self.checkUpRightDiagonal(self.actualX, self.actualY + 1):
-                    if self.addSnakePiece(self.actualX, self.actualY + 1):
-                        self.snake.prevMov = 's'
-                        return True
-            elif self.snake.prevMov == 'a':
-                if self.checkUpLeftDiagonal(self.actualX, self.actualY + 1):
-                    if self.addSnakePiece(self.actualX, self.actualY + 1):
-                        self.snake.prevMov = 's'
-                        return True
-            else:
-                if self.addSnakePiece(self.actualX, self.actualY + 1):
-                    self.snake.prevMov = 's'
-                    return True
+            if self.checkTouchesDown():
+                return self.addSnakePiece(self.actualX, self.actualY + 1)
         elif value == "d":
-            if not self.checkVerticalTouch(self.actualX + 1, self.actualY):
-                return False
-            if self.snake.prevMov == 'w':
-                if self.checkUpLeftDiagonal(self.actualX + 1, self.actualY):
-                    if self.addSnakePiece(self.actualX + 1, self.actualY):
-                        self.snake.prevMov = 'd'
-                        return True
-            elif self.snake.prevMov == 's':
-                if self.checkUpRightDiagonal(self.actualX + 1, self.actualY):
-                    if self.addSnakePiece(self.actualX + 1, self.actualY):
-                        self.snake.prevMov = 'd'
-                        return True
-            else:
-                if self.addSnakePiece(self.actualX + 1, self.actualY):
-                    self.snake.prevMov = 'd'
-                    return True
+            if self.checkTouchesRight():
+                return self.addSnakePiece(self.actualX+1, self.actualY)
         elif value == "a":
-            if not self.checkVerticalTouch(self.actualX - 1, self.actualY):
-                return False
-            if self.snake.prevMov == 'w':
-                if self.checkDownLeftDiagonal(self.actualX - 1, self.actualY):
-                    if self.addSnakePiece(self.actualX - 1, self.actualY):
-                        self.snake.prevMov = 'a'
-                        return True
-            elif self.snake.prevMov == 's':
-                if self.checkUpLeftDiagonal(self.actualX - 1, self.actualY):
-                    if self.addSnakePiece(self.actualX - 1, self.actualY):
-                        self.snake.prevMov = 'a'
-                        return True
-            else:
-                if self.addSnakePiece(self.actualX - 1, self.actualY):
-                    self.snake.prevMov = 'a'
-                    return True
+            if self.checkTouchesLeft():
+                return self.addSnakePiece(self.actualX-1, self.actualY)
         else:
             return False
 
@@ -266,48 +210,6 @@ class Board:
         a = np.array(self.board)
         for line in a:
             print('  '.join(map(str, line)))
-
-    def checkDownRightDiagonal(self, x, y):
-        if self.checkSize(x + 1, y + 1):
-            if self.board[y + 1][x + 1] == '1':
-                return False
-        return True
-
-    def checkDownLeftDiagonal(self, x, y):
-        if self.checkSize(x - 1, y + 1):
-            if self.board[y + 1][x - 1] == '1':
-                return False
-        return True
-
-    def checkUpLeftDiagonal(self, x, y):
-        if self.checkSize(x - 1, y - 1):
-            if self.board[y - 1][x - 1] == '1':
-                return False
-        return True
-
-    def checkUpRightDiagonal(self, x, y):
-        if self.checkSize(x + 1, y - 1):
-            if self.board[y - 1][x + 1] == '1':
-                return False
-        return True
-
-    def checkVerticalTouch(self, x, y):
-        if self.checkSize(x, y - 1):
-            if self.board[y - 1][x] == '1':
-                return False
-        if self.checkSize(x, y + 1):
-            if self.board[y + 1][x] == '1':
-                return False
-        return True
-
-    def checkHorizontalTouch(self, x, y):
-        if self.checkSize(x - 1, y):
-            if self.board[y][x - 1] == '1':
-                return False
-        if self.checkSize(x + 1, y):
-            if self.board[y][x + 1] == '1':
-                return False
-        return True
 
     def checkSize(self, x, y):
         if self.size - 1 >= x >= 0 and self.size - 1 >= y >= 0:
@@ -361,3 +263,58 @@ class Board:
         self.actualX = self.snake.path[-1][0]
         self.actualY = self.snake.path[-1][1]
 
+    def checkTouchesUp(self):
+        points = []
+        points.append((self.actualX - 1, self.actualY - 1))
+        points.append((self.actualX - 1, self.actualY - 2))
+        points.append((self.actualX, self.actualY - 2))
+        points.append((self.actualX + 1, self.actualY - 2))
+        points.append((self.actualX + 1, self.actualY - 1))
+
+        for p in points:
+            if self.checkSize(p[0], p[1]):
+                if self.board[p[1]][p[0]] == "1":
+                    return False
+        return True
+
+    def checkTouchesDown(self):
+        points = []
+        points.append((self.actualX - 1, self.actualY + 1))
+        points.append((self.actualX - 1, self.actualY + 2))
+        points.append((self.actualX, self.actualY + 2))
+        points.append((self.actualX + 1, self.actualY + 2))
+        points.append((self.actualX + 1, self.actualY + 1))
+
+        for p in points:
+            if self.checkSize(p[0], p[1]):
+                if self.board[p[1]][p[0]] == "1":
+                    return False
+        return True
+
+    def checkTouchesRight(self):
+        points = []
+        points.append((self.actualX + 1, self.actualY - 1))
+        points.append((self.actualX + 2, self.actualY - 1))
+        points.append((self.actualX + 2, self.actualY))
+        points.append((self.actualX + 2, self.actualY + 1))
+        points.append((self.actualX + 1, self.actualY + 1))
+
+        for p in points:
+            if self.checkSize(p[0], p[1]):
+                if self.board[p[1]][p[0]] == "1":
+                    return False
+        return True
+
+    def checkTouchesLeft(self):
+        points = []
+        points.append((self.actualX - 1, self.actualY - 1))
+        points.append((self.actualX - 2, self.actualY - 1))
+        points.append((self.actualX - 2, self.actualY))
+        points.append((self.actualX - 2, self.actualY + 1))
+        points.append((self.actualX - 1, self.actualY + 1))
+
+        for p in points:
+            if self.checkSize(p[0], p[1]):
+                if self.board[p[1]][p[0]] == "1":
+                    return False
+        return True
