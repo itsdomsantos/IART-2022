@@ -43,7 +43,6 @@ class Menu:
                     sys.exit()
                 if event.type == pg.MOUSEBUTTONDOWN:
                     print(game.snake.path)
-                    print(game.manhattan_distance())
                     for x in game.chess_pieces:
                         print(x.type, x.attacks)
                     mouseX = event.pos[0]  # x
@@ -51,10 +50,8 @@ class Menu:
                     clicked_row = int(mouseX // screen.BLOCKSIZE)
                     clicked_col = int(mouseY // screen.BLOCKSIZE)
                     value = game.getInput(clicked_row, clicked_col)
-                    print(value)
                     if value != "0":
                         game.processInput(value)
-                    print(clicked_col, clicked_row)
                 if event.type == pg.KEYDOWN:
                     if event.key == pg.K_h:
                         print("Hint asked")
@@ -91,10 +88,12 @@ class Menu:
         print("Select number of puzzle: ")
         print("For puzzle with size 5x5 enter a number between 1-10")
         print("For puzzle with size 6x6 enter a number between 11-20")
+        print("For puzzle with size 8x8 enter a number between 21 or 22")
         menuchoice = str(input())
-        while 1 > int(menuchoice) > 20:
+        while 1 > int(menuchoice) > 22:
             print("Invalid Input!")
             print("For puzzle with size 5x5 enter a number between 1-10")
             print("For puzzle with size 6x6 enter a number between 11-20")
+            print("For puzzle with size 8x8 enter a number between 21 or 22")
             menuchoice = str(input())
         return menuchoice

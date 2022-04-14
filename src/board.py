@@ -38,10 +38,8 @@ class Board:
 
     def processInput(self, value):
         if not self.validInput(value):
-            print("Move not allowed")
             return False
         else:
-            print("Move accepted")
             self.cost += 1
             return True
 
@@ -172,10 +170,6 @@ class Board:
         for x in array:
             if self.size > x[0] >= 0 and self.size > x[1] >= 0:
                 aux.append(x)
-        for t in aux:
-            print(t)
-
-        print("##########################")
         return aux
 
     def validInput(self, value):
