@@ -9,3 +9,5 @@ class Snake:
     def undo_last_movement(self):
             self.path.pop(-1)
 
+    def restart_snake(self):
+        self.path=[self.path[0]]

@@ -6,6 +6,7 @@ import pygame as pg
 class Display:
 
     def __init__(self, size):
+        self.size = size
         self.width = size * 100
         self.heigth = size * 100
         self.WHITE = (240, 240, 240)
@@ -31,14 +32,14 @@ class Display:
     def update_board(self, board):
         for x in range(0, self.width, self.BLOCKSIZE):
             for y in range(0, self.heigth, self.BLOCKSIZE):
-                if board[y//self.BLOCKSIZE][x//self.BLOCKSIZE] == "1":
-                    self.add_square(x//self.BLOCKSIZE, y//self.BLOCKSIZE)
+                if board[y // self.BLOCKSIZE][x // self.BLOCKSIZE] == "1":
+                    self.add_square(x // self.BLOCKSIZE, y // self.BLOCKSIZE)
                 else:
                     rect = pg.Rect(x, y, self.BLOCKSIZE, self.BLOCKSIZE)
                     pg.draw.rect(self.screen, self.BLACK, rect, 1)
         pg.display.update()
 
-    def color_square(self, x, y,color):
+    def color_square(self, x, y, color):
         pg.draw.rect(self.screen, color,
                      pg.Rect(x * self.BLOCKSIZE + 1, y * self.BLOCKSIZE + 1, self.BLOCKSIZE - 2, self.BLOCKSIZE - 2))
         pg.display.update()
@@ -66,9 +67,25 @@ class Display:
         pg.Surface.blit(self.screen, image, (position[0] * 100 + 21, position[1] * 100 + 21))
         pg.display.update()
 
-
-    def delete_square(self,x,y):
+    def delete_square(self, x, y):
         self.color_square(x, y, self.WHITE)
 
-    def add_square(self,x,y):
+    def add_square(self, x, y):
         self.color_square(x, y, self.GREEN)
+
+    def draw_pieces(self, pieces):
+        for x in pieces:
+            self.draw_chess_piece(x.type, x.position)
+
+    def draw_borders(self):
+        self.add_square(0, self.size - 1)
+        self.draw_chess_piece("s", (0, self.size - 1))
+        self.draw_chess_piece("f", (self.size - 1, 0))
+
+    def reset_board(self, board):
+        self.screen.fill(self.WHITE)
+        self.add_square(0, self.size - 1)
+        self.draw_chess_piece("s", (0, self.size - 1))
+        self.draw_chess_piece("f", (self.size - 1, 0))
+        self.draw_pieces(board.chess_pieces)
+        self.update_board(board.board)

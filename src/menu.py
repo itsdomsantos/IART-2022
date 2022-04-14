@@ -5,7 +5,6 @@ from snake import Snake
 import pygame as pg
 import sys
 
-
 class Menu:
     def __init__(self):
         print("Welcome to Chess Snake Game")
@@ -31,17 +30,14 @@ class Menu:
         screen = display.Display(game.size)
         screen.init_board()
         screen.update_board(game.board)
-        screen.add_square(0, game.size - 1)
-        screen.draw_chess_piece("s", (0, game.size - 1))
-        screen.draw_chess_piece("f", (game.size - 1, 0))
-        for x in game.chess_pieces:
-            screen.draw_chess_piece(x.type, x.position)
+        screen.draw_borders()
+        screen.draw_pieces(game.chess_pieces)
         while game.gameIsOn:
-            screen.update_board(game.board)
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     sys.exit()
                 if event.type == pg.MOUSEBUTTONDOWN:
+                    print(game.actualX, game.actualY)
                     print(game.snake.path)
                     for x in game.chess_pieces:
                         print(x.type, x.attacks)
@@ -52,6 +48,9 @@ class Menu:
                     value = game.getInput(clicked_row, clicked_col)
                     if value != "0":
                         game.processInput(value)
+                        screen.update_board(game.board)
+                        if game.cost == 0:
+                            screen.reset_board(game)
                 if event.type == pg.KEYDOWN:
                     if event.key == pg.K_h:
                         print("Hint asked")
@@ -61,6 +60,7 @@ class Menu:
                             game.undoLastMovement()
                     elif event.key == pg.K_ESCAPE:
                         sys.exit()
+        print(game.actualX, game.actualY)
 
         screen.update_board(game.board)
         screen.draw_chess_piece("f", (game.size - 1, 0))

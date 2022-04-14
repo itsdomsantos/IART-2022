@@ -45,11 +45,15 @@ class Board:
 
     def addSnakePiece(self, x, y):
         if self.moveAllowed(x, y):
+            if self.board[y][x] == "f":
+                self.gameIsOn = False
             self.board[y][x] = '1'
             self.actualX = x
             self.actualY = y
             self.updateAttacks(x, y)
             self.snake.update_path((x, y))
+            if not self.checkAvailableMoves() and self.gameIsOn:
+                self.resetGame()
             return True
         else:
             return False
@@ -181,10 +185,10 @@ class Board:
                 return self.addSnakePiece(self.actualX, self.actualY + 1)
         elif value == "d":
             if self.checkTouchesRight():
-                return self.addSnakePiece(self.actualX+1, self.actualY)
+                return self.addSnakePiece(self.actualX + 1, self.actualY)
         elif value == "a":
             if self.checkTouchesLeft():
-                return self.addSnakePiece(self.actualX-1, self.actualY)
+                return self.addSnakePiece(self.actualX - 1, self.actualY)
         else:
             return False
 
@@ -192,12 +196,9 @@ class Board:
         if not self.checkSize(x, y):
             return False
         if self.board[y][x] == 'f':
-            print("Path completed")
-            self.gameIsOn = False
             return True
         if self.board[y][x] != '0':
             return False
-
         return True
 
     def printBoard(self):
@@ -264,12 +265,15 @@ class Board:
         points.append((self.actualX, self.actualY - 2))
         points.append((self.actualX + 1, self.actualY - 2))
         points.append((self.actualX + 1, self.actualY - 1))
+        flag = 0
 
         for p in points:
             if self.checkSize(p[0], p[1]):
+                flag = 1
                 if self.board[p[1]][p[0]] == "1":
                     return False
-        return True
+        if flag == 1:
+            return True
 
     def checkTouchesDown(self):
         points = []
@@ -278,12 +282,15 @@ class Board:
         points.append((self.actualX, self.actualY + 2))
         points.append((self.actualX + 1, self.actualY + 2))
         points.append((self.actualX + 1, self.actualY + 1))
+        flag = 0
 
         for p in points:
             if self.checkSize(p[0], p[1]):
+                flag = 1
                 if self.board[p[1]][p[0]] == "1":
                     return False
-        return True
+        if flag == 1:
+            return True
 
     def checkTouchesRight(self):
         points = []
@@ -292,12 +299,14 @@ class Board:
         points.append((self.actualX + 2, self.actualY))
         points.append((self.actualX + 2, self.actualY + 1))
         points.append((self.actualX + 1, self.actualY + 1))
-
+        flag = 0
         for p in points:
             if self.checkSize(p[0], p[1]):
+                flag = 1
                 if self.board[p[1]][p[0]] == "1":
                     return False
-        return True
+        if flag == 1:
+            return True
 
     def checkTouchesLeft(self):
         points = []
@@ -306,9 +315,37 @@ class Board:
         points.append((self.actualX - 2, self.actualY))
         points.append((self.actualX - 2, self.actualY + 1))
         points.append((self.actualX - 1, self.actualY + 1))
+        flag = 0
 
         for p in points:
             if self.checkSize(p[0], p[1]):
+                flag = 1
                 if self.board[p[1]][p[0]] == "1":
                     return False
-        return True
+        if flag == 1:
+            return True
+
+    def checkAvailableMoves(self):
+        if self.checkTouchesLeft() and self.moveAllowed(self.actualX - 1, self.actualY):
+            return True
+        elif self.checkTouchesRight() and self.moveAllowed(self.actualX + 1, self.actualY):
+            return True
+        elif self.checkTouchesUp() and self.moveAllowed(self.actualX, self.actualY - 1):
+            return True
+        elif self.checkTouchesDown() and self.moveAllowed(self.actualX, self.actualY + 1):
+            return True
+        else:
+            return False
+
+    def resetGame(self):
+        self.snake.restart_snake()
+        for y in range(0, self.size):
+            for x in range(0, self.size):
+                if self.board[y][x] == "1":
+                    self.board[y][x] = "0"
+
+        self.cost = -1
+        self.actualX = 0
+        self.actualY = self.size - 1
+        for cp in self.chess_pieces:
+            cp.attacks = 0
