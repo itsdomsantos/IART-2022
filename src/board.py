@@ -4,12 +4,13 @@ import snake
 
 
 class Board:
-    def __init__(self, file):
+    def __init__(self, file, ai):
         self.gameIsOn = True
         self.chess_pieces = []
         self.snake = snake.Snake()
         self.openLevel(file)
         self.cost = 0
+        self.ai = ai
 
     def openLevel(self, file):
         f = open(file, 'rb')
@@ -53,7 +54,8 @@ class Board:
             self.updateAttacks(x, y)
             self.snake.update_path((x, y))
             if not self.checkAvailableMoves() and self.gameIsOn:
-                self.resetGame()
+                if not self.ai:
+                    self.resetGame()
             return True
         else:
             return False

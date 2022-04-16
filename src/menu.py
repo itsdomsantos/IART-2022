@@ -4,6 +4,9 @@ import display
 from snake import Snake
 import pygame as pg
 import sys
+import dfs
+import copy
+
 
 class Menu:
     def __init__(self):
@@ -25,7 +28,7 @@ class Menu:
 
     def single_player_mode(self):
         level = self.level_menu(self)
-        game = board.Board("./levels/level" + level + ".txt")
+        game = board.Board("./levels/level" + level + ".txt", False)
 
         screen = display.Display(game.size)
         screen.init_board()
@@ -75,14 +78,11 @@ class Menu:
         sys.exit()
 
     def ai_mode(self):
-        print("Sorry this mode is not available at the moment")
-        print("Enter 0 to return to main menu")
-        menuchoice = str(input())
-        while menuchoice != "0":
-            print("Invalid Input!")
-            print("Enter 0 to return to main menu")
-            menuchoice = str(input())
-        self.main_menu(self)
+        level = self.level_menu(self)
+        algorithm = dfs.DFS(level)
+        temp = copy.deepcopy(algorithm.game.board)
+        algorithm.dfs(temp)
+        time.sleep(10)
 
     def level_menu(self):
         print("Select number of puzzle: ")
