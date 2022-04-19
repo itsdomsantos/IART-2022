@@ -80,8 +80,7 @@ class Menu:
     def ai_mode(self):
         level = self.level_menu(self)
         algorithm = dfs.DFS(level)
-        temp = copy.deepcopy(algorithm.game.board)
-        algorithm.dfs(temp)
+        algorithm.dfs()
         time.sleep(10)
 
     def level_menu(self):

@@ -7,7 +7,7 @@ class Snake:
         self.path.append(position)
 
     def undo_last_movement(self):
-            self.path.pop(-1)
+        self.path.pop(-1)
 
     def restart_snake(self):
-        self.path=[self.path[0]]
+        self.path = [self.path[0]]
