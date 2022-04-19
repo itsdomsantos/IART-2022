@@ -69,9 +69,13 @@ class Display:
 
     def delete_square(self, x, y):
         self.color_square(x, y, self.WHITE)
+        if x == self.size-1 and y == 0:
+            self.draw_chess_piece("f", (self.size - 1, 0))
 
     def add_square(self, x, y):
         self.color_square(x, y, self.GREEN)
+        if x == self.size - 1 and y == 0:
+            self.draw_chess_piece("f", (self.size - 1, 0))
 
     def draw_pieces(self, pieces):
         for x in pieces:

@@ -272,7 +272,7 @@ class Board:
         for p in points:
             if self.checkSize(p[0], p[1]):
                 flag = 1
-                if self.board[p[1]][p[0]] == "1":
+                if self.board[p[1]][p[0]] == "1" or self.board[p[1]][p[0]] == "s":
                     return False
         if flag == 1:
             return True
@@ -289,7 +289,7 @@ class Board:
         for p in points:
             if self.checkSize(p[0], p[1]):
                 flag = 1
-                if self.board[p[1]][p[0]] == "1":
+                if self.board[p[1]][p[0]] == "1" or self.board[p[1]][p[0]] == "s":
                     return False
         if flag == 1:
             return True
@@ -305,7 +305,7 @@ class Board:
         for p in points:
             if self.checkSize(p[0], p[1]):
                 flag = 1
-                if self.board[p[1]][p[0]] == "1":
+                if self.board[p[1]][p[0]] == "1" or self.board[p[1]][p[0]] == "s":
                     return False
         if flag == 1:
             return True
@@ -322,7 +322,7 @@ class Board:
         for p in points:
             if self.checkSize(p[0], p[1]):
                 flag = 1
-                if self.board[p[1]][p[0]] == "1":
+                if self.board[p[1]][p[0]] == "1" or self.board[p[1]][p[0]] == "s":
                     return False
         if flag == 1:
             return True

@@ -10,6 +10,7 @@ import copy
 
 class Menu:
     def __init__(self):
+        sys.setrecursionlimit(100000)
         print("Welcome to Chess Snake Game")
 
     def main_menu(self):
@@ -80,7 +81,14 @@ class Menu:
     def ai_mode(self):
         level = self.level_menu(self)
         algorithm = dfs.DFS(level)
-        algorithm.dfs()
+        screen = display.Display(algorithm.game.size)
+        screen.init_board()
+        screen.update_board(algorithm.game.board)
+        screen.draw_borders()
+        screen.draw_pieces(algorithm.game.chess_pieces)
+        screen.update_board(algorithm.game.board)
+        algorithm.dfs(screen)
+        screen.update_board(algorithm.game.board)
         time.sleep(10)
 
     def level_menu(self):
