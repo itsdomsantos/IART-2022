@@ -64,7 +64,6 @@ class Menu:
                             game.undoLastMovement()
                     elif event.key == pg.K_ESCAPE:
                         sys.exit()
-        print(game.actualX, game.actualY)
 
         screen.update_board(game.board)
         screen.draw_chess_piece("f", (game.size - 1, 0))
@@ -73,8 +72,6 @@ class Menu:
             print("All pieces attack an equal number of squares")
         else:
             print("Pieces have a different number of squares attacked")
-        for x in game.chess_pieces:
-            print(x.type, x.attacks)
         time.sleep(5)
         sys.exit()
 
