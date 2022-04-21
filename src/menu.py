@@ -1,11 +1,9 @@
 import time
 import board
 import display
-from snake import Snake
 import pygame as pg
 import sys
 import dfs
-import copy
 
 
 class Menu:
@@ -30,7 +28,6 @@ class Menu:
     def single_player_mode(self):
         level = self.level_menu(self)
         game = board.Board("./levels/level" + level + ".txt", False)
-
         screen = display.Display(game.size)
         screen.init_board()
         screen.update_board(game.board)
@@ -41,10 +38,7 @@ class Menu:
                 if event.type == pg.QUIT:
                     sys.exit()
                 if event.type == pg.MOUSEBUTTONDOWN:
-                    print(game.actualX, game.actualY)
-                    print(game.snake.path)
-                    for x in game.chess_pieces:
-                        print(x.type, x.attacks)
+                    game.display_game_info()
                     mouseX = event.pos[0]  # x
                     mouseY = event.pos[1]  # y
                     clicked_row = int(mouseX // screen.BLOCKSIZE)
@@ -57,8 +51,14 @@ class Menu:
                             screen.reset_board(game)
                 if event.type == pg.KEYDOWN:
                     if event.key == pg.K_h:
-                        print("Hint asked")
+                        hint = game.hint()
+                        if hint != -1:
+                            screen.add_hint(hint[0], hint[1], True)
+                        else:
+                            screen.add_hint(game.actualX, game.actualY, False)
+
                     elif event.key == pg.K_u:
+                        game.display_game_info()
                         if len(game.snake.path) > 1:
                             screen.delete_square(game.actualX, game.actualY)
                             game.undoLastMovement()
@@ -104,3 +104,4 @@ class Menu:
             print("For puzzle with size 8x8 enter a number between 21 or 22")
             menuchoice = str(input())
         return menuchoice
+

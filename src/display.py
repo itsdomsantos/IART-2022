@@ -12,6 +12,8 @@ class Display:
         self.WHITE = (240, 240, 240)
         self.BLACK = (0, 0, 0)
         self.GREEN = (20, 200, 20)
+        self.BLUE = (20, 20, 200)
+        self.RED = (200, 20, 20)
         self.BLOCKSIZE = 100
         self.screen = 0
         self.king = pg.image.load("./Pieces/k.png")
@@ -22,6 +24,7 @@ class Display:
         self.pawn = pg.image.load("./Pieces/p.png")
         self.begin = pg.image.load("./Pieces/s.png")
         self.end = pg.image.load("./Pieces/f.png")
+        self.hint = []
 
     def init_board(self):
         pg.init()
@@ -68,11 +71,27 @@ class Display:
         pg.display.update()
 
     def delete_square(self, x, y):
+        if len(self.hint) != 0:
+            self.color_square(self.hint[0], self.hint[1], self.WHITE)
+            self.hint.clear()
         self.color_square(x, y, self.WHITE)
-        if x == self.size-1 and y == 0:
+        if x == self.size - 1 and y == 0:
+            self.draw_chess_piece("f", (self.size - 1, 0))
+
+    def add_hint(self, x, y, valid):
+        self.hint.append(x)
+        self.hint.append(y)
+        if valid:
+            self.color_square(x, y, self.BLUE)
+        else:
+            self.color_square(x, y, self.RED)
+        if x == self.size - 1 and y == 0:
             self.draw_chess_piece("f", (self.size - 1, 0))
 
     def add_square(self, x, y):
+        if len(self.hint) != 0:
+            self.color_square(self.hint[0], self.hint[1], self.WHITE)
+            self.hint.clear()
         self.color_square(x, y, self.GREEN)
         if x == self.size - 1 and y == 0:
             self.draw_chess_piece("f", (self.size - 1, 0))

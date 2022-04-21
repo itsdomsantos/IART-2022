@@ -26,5 +26,7 @@ python main.py
 - The board will appear next
 - Now choose the tile for your move, if it is accepted it will turn green otherwise nothing will append
 - To ask an hint enter 'H'
+  - If you have a possible solution move, the corresponding tile will appear in **blue**
+  - Otherwise, the current position will become **red**, indicating that you are in the wrong way, so it's better to undo last move.
 - To undo last movement enter 'U'
 - To exit game enter press 'Esc' 

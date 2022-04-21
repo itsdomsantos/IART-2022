@@ -7,6 +7,7 @@ class Board:
     def __init__(self, file, ai):
         self.gameIsOn = True
         self.chess_pieces = []
+        self.sol = []
         self.snake = snake.Snake()
         self.openLevel(file)
         self.cost = 0
@@ -26,11 +27,20 @@ class Board:
         for line in f:
             split = line.split()
             if lineIndex != 0:
+                if split[0].decode("utf-8") == "sol":
+                    break
                 type = split[0].decode("utf-8")
                 xPos = int(split[1])
                 yPos = int(split[2])
                 self.board[yPos][xPos] = type
                 self.chess_pieces.append(piece.Pieces(type, xPos, yPos))
+            lineIndex += 1
+        for line in f:
+            split = line.split()
+            if lineIndex != 0:
+                xPos = int(split[0])
+                yPos = int(split[1])
+                self.sol.append((xPos, yPos))
             lineIndex += 1
         for x in self.chess_pieces:
             x.define_attacks(self.posAttacked(x.position[0], x.position[1], x.type))
@@ -351,3 +361,14 @@ class Board:
         self.actualY = self.size - 1
         for cp in self.chess_pieces:
             cp.attacks = 0
+
+    def hint(self):
+        for i in range(0, len(self.sol)):
+            if self.sol[i] == (self.actualX, self.actualY):
+                return self.sol[i + 1]
+        return -1
+
+    def display_game_info(self):
+        for x in self.chess_pieces:
+            print(x.type, ":", x.attacks)
+        print("============")
