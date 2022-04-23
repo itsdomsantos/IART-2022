@@ -251,6 +251,12 @@ class Board:
     def manhattan_distance(self):
         return abs((self.size - 1) - self.actualX) + abs(0 - self.actualY)
 
+    def attack_diff(self):
+        temp = []
+        for cp in self.chess_pieces:
+            temp.append(cp.attacks)
+        return max(temp) - min(temp)
+
     def getInput(self, x, y):
         if x == self.actualX - 1 and y == self.actualY:
             return "a"

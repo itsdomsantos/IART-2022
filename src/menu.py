@@ -49,6 +49,7 @@ class Menu:
                         screen.update_board(game.board)
                         if game.cost == 0:
                             screen.reset_board(game)
+                    print(game.attack_diff())
                 if event.type == pg.KEYDOWN:
                     if event.key == pg.K_h:
                         hint = game.hint()
@@ -75,7 +76,27 @@ class Menu:
         time.sleep(5)
         sys.exit()
 
+
+
     def ai_mode(self):
+        print("Select algorithm: ")
+        print("DFS (0)    A-Star/Heuristic 1 (1)   A-Star/ Heuristic 2 (2) A-Star/Heuristic 3 (3)")
+        menuchoice = str(input())
+        if menuchoice == "0":
+            self.dfs_mode(self)
+        elif menuchoice == "1":
+            print("Loading")
+            self.ai_mode(self)
+        elif menuchoice == "2":
+            print("Loading")
+            self.ai_mode(self)
+        elif menuchoice == "3":
+            print("Loading")
+            self.ai_mode(self)
+        else:
+            print("Invalid Input!")
+            self.main_menu(self)
+    def dfs_mode(self):
         level = self.level_menu(self)
         algorithm = dfs.DFS(level)
         screen = display.Display(algorithm.game.size)
@@ -101,4 +122,3 @@ class Menu:
             print("For puzzle with size 8x8 enter a number between 21 or 22")
             menuchoice = str(input())
         return menuchoice
-
