@@ -68,6 +68,50 @@ class ASTAR:
         self.a_star(screen)
 
 
+    def a_starTerminal(self):  # function for a_star on terminal
+        if self.done:
+            return
+        # verificar se está terminado
+
+        # ir buscar o current state (criar função que definida a prioridade 'f = g + h')
+        item = self.queue.get()
+        current_state = item[1]
+
+
+
+        print(current_state.printBoard())
+        board = copy.deepcopy(current_state.board)
+        # adicionar o estado aos visited
+        if not self.check_visited(board):
+            self.visited.append(state.State(board))
+
+        # se o jogo terminou e as peças atacam de igual maneira terminar
+        if not current_state.gameIsOn and current_state.checkSum():
+            print("done")
+            self.solution = current_state.snake.path
+            self.game = current_state
+            print(self.solution)
+            self.done = True
+            return
+
+        # se o current_state não tem moves possiveis volta a chamar o algoritmo
+        if not current_state.checkAvailableMoves or not current_state.gameIsOn or len(
+                self.get_state(board).moves) == 4:
+            self.a_starTerminal()
+
+        # se tiver moves possiveis, adiciona cada estado do board a priority queue atualiza os moves no visited
+        for x in self.possible_moves:
+            temp = copy.deepcopy(current_state)
+            if self.done:
+                return
+            if x in self.get_state(board).moves:
+                continue
+            self.add_move(x, board)
+            if temp.processInput(x):
+                self.queue.put((self.heuristic_calculation(temp, self.heuristic), temp))
+            print(self.heuristic_calculation(temp, self.heuristic))
+        self.a_starTerminal()
+
 
 
     def heuristic_calculation(self, game, type):
