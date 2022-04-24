@@ -5,7 +5,7 @@ import pygame as pg
 import sys
 import dfs
 import Astar
-
+import greedy
 
 class Menu:
     def __init__(self):
@@ -110,34 +110,48 @@ class Menu:
 
     def ai_mode(self):
         print("Select algorithm: ")
-        print("DFS (0)    A-Star (1)")
+        print("DFS (0)    A-Star (1)    Greedy (2)")
         menuchoice = str(input())
         if menuchoice == "0":
             self.dfs_mode(self)
             return
         elif menuchoice == "1":
-            self.select_Heuristic(self)
+            self.select_Heuristic(self, 1)
             return
-        else:
-            print("Invalid Input!")
-            self.main_menu(self)
-            return
-
-    def select_Heuristic(self):
-        print("Select heuristic: ")
-        print("A-Star/Heuristic 1 (0)   A-Star/ Heuristic 2 (1)    A-Star/Heuristic 3 (2)")
-        menuchoice = str(input())
-
-        if menuchoice == "0":
-            self.a_star_mode(self, 1);
-        elif menuchoice == "1":
-            self.a_star_mode(self, 2);
         elif menuchoice == "2":
-            self.a_star_mode(self, 3);
+            self.select_Heuristic(self, 2)
+            return
         else:
             print("Invalid Input!")
             self.main_menu(self)
             return
+
+    def select_Heuristic(self, alg):
+        print("Select heuristic: ")
+        print("Heuristic 1 (0)   Heuristic 2 (1)    Heuristic 3 (2)")
+        menuchoice = str(input())
+        if alg == 1:
+            if menuchoice == "0":
+                self.a_star_mode(self, 1);
+            elif menuchoice == "1":
+                self.a_star_mode(self, 2);
+            elif menuchoice == "2":
+                self.a_star_mode(self, 3);
+            else:
+                print("Invalid Input!")
+                self.main_menu(self)
+                return
+        elif alg == 2:
+            if menuchoice == "0":
+                self.greedy_mode(self, 1);
+            elif menuchoice == "1":
+                self.greedy_mode(self, 2);
+            elif menuchoice == "2":
+                self.greedy_mode(self, 3);
+            else:
+                print("Invalid Input!")
+                self.main_menu(self)
+                return
 
 
     def a_star_mode(self, heuristic):
@@ -159,7 +173,24 @@ class Menu:
             algorithm.a_starTerminal()
             time.sleep(10)
 
+    def greedy_mode(self, heuristic):
+        level = self.level_menu(self)
+        algorithm = greedy.Greedy(level, heuristic)
 
+        if self.pygameOn:
+            screen = display.Display(algorithm.game.size)
+            screen.init_board()
+            screen.update_board(algorithm.game.board)
+            screen.draw_borders()
+            screen.draw_pieces(algorithm.game.chess_pieces)
+            screen.update_board(algorithm.game.board)
+            algorithm.greedy(screen)
+            screen.update_board(algorithm.game.board)
+            time.sleep(10)
+
+        if not self.pygameOn: ### falta so para o terminal
+            algorithm.greedyTerminal()
+            time.sleep(10)
 
 
     def dfs_mode(self):
