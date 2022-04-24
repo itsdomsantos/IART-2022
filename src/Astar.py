@@ -19,7 +19,7 @@ class ASTAR:
 
     def Astar(self, start_node, stop_node, screen):
 
-        ###add starting state to list
+        ###add starting state to open list
         self.open.add(state.State(copy.deepcopy(self.game.board)))
 
         screen.update_board(self.game.board)
@@ -36,7 +36,7 @@ class ASTAR:
             n = None
 
             for v in self.open:
-                if n == None or self.game.cost + self.game.attack_diff():
+                if n == None or self.game.cost + self.game.attack_diff() < self.heuristic:
                     n = v
 
             if n == None:
