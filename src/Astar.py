@@ -36,7 +36,7 @@ class ASTAR:
             n = None
 
             for v in self.open:
-                if n == None or self.game.cost + self.game.attack_diff() < self.heuristic:
+                if n == None or self.game.cost + self.game.attack_diff():
                     n = v
 
             if n == None:
