@@ -4,7 +4,7 @@ import snake
 
 
 class Board:
-    def __init__(self, file, ai):
+    def __init__(self, file, ai, heuristic=0):
         self.gameIsOn = True
         self.chess_pieces = []
         self.sol = []
@@ -12,6 +12,7 @@ class Board:
         self.openLevel(file)
         self.cost = 0
         self.ai = ai
+        self.heuristic = heuristic
 
     def openLevel(self, file):
         f = open(file, 'rb')
@@ -378,3 +379,14 @@ class Board:
         for x in self.chess_pieces:
             print(x.type, ":", x.attacks)
         print("============")
+
+    def __lt__(self, other):
+        if self.heuristic == 1:
+            return (self.manhattan_distance() + self.cost) < (other.manhattan_distance() + other.cost)
+        elif self.heuristic == 2:
+            return (self.attack_diff() + self.cost) < (other.attack_diff() + other.cost)
+        elif self.heuristic == 3:
+            return (self.manhattan_distance() + self.attack_diff() + self.cost) < (
+                    other.manhattan_distance() + other.attack_diff() + other.cost)
+        else:
+            return self.cost < other.cost

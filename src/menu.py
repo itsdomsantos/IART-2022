@@ -4,6 +4,7 @@ import display
 import pygame as pg
 import sys
 import dfs
+import Astar
 
 
 class Menu:
@@ -12,6 +13,10 @@ class Menu:
         print("Welcome to Chess Snake Game")
 
     def main_menu(self):
+
+        print("Select screening mode: ")
+        print("Terminal  (t)   Pygame  (s)")
+        screening = str(input())
         print("Select game mode: ")
         print("Computer (c)    Single Player (p)   Exit(x)")
         menuchoice = str(input())
@@ -76,26 +81,41 @@ class Menu:
         time.sleep(5)
         sys.exit()
 
-
-
     def ai_mode(self):
         print("Select algorithm: ")
         print("DFS (0)    A-Star/Heuristic 1 (1)   A-Star/ Heuristic 2 (2) A-Star/Heuristic 3 (3)")
         menuchoice = str(input())
         if menuchoice == "0":
             self.dfs_mode(self)
+            return
         elif menuchoice == "1":
-            print("Loading")
-            self.ai_mode(self)
+            self.a_star_mode(self, 1)
+            return
         elif menuchoice == "2":
             print("Loading")
-            self.ai_mode(self)
+            self.a_star_mode(self, 2)
+            return
         elif menuchoice == "3":
             print("Loading")
-            self.ai_mode(self)
+            self.a_star_mode(self, 3)
         else:
             print("Invalid Input!")
             self.main_menu(self)
+            return
+
+    def a_star_mode(self, heuristic):
+        level = self.level_menu(self)
+        algorithm = Astar.ASTAR(level, heuristic)
+        screen = display.Display(algorithm.game.size)
+        screen.init_board()
+        screen.update_board(algorithm.game.board)
+        screen.draw_borders()
+        screen.draw_pieces(algorithm.game.chess_pieces)
+        screen.update_board(algorithm.game.board)
+        algorithm.a_star(screen)
+        screen.update_board(algorithm.game.board)
+        time.sleep(10)
+
     def dfs_mode(self):
         level = self.level_menu(self)
         algorithm = dfs.DFS(level)
@@ -113,12 +133,10 @@ class Menu:
         print("Select number of puzzle: ")
         print("For puzzle with size 5x5 enter a number between 1-10")
         print("For puzzle with size 6x6 enter a number between 11-20")
-        print("For puzzle with size 8x8 enter a number between 21 or 22")
         menuchoice = str(input())
-        while 1 > int(menuchoice) > 22:
+        while 1 > int(menuchoice) > 20:
             print("Invalid Input!")
             print("For puzzle with size 5x5 enter a number between 1-10")
             print("For puzzle with size 6x6 enter a number between 11-20")
-            print("For puzzle with size 8x8 enter a number between 21 or 22")
             menuchoice = str(input())
         return menuchoice

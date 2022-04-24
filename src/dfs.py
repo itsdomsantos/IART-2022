@@ -1,6 +1,3 @@
-# '''
-import time
-import display
 import board
 import copy
 import state
@@ -16,7 +13,6 @@ class DFS:
         self.visited.append(state.State(temp))
         self.possible_moves = ["w", "a", "s", "d"]
         self.done = False
-        self.counter = 0
         sys.setrecursionlimit(99999999)
 
     def dfs(self,screen):  # function for dfs
