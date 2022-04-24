@@ -93,8 +93,20 @@ class Menu:
             sys.exit()
 
         elif not self.pygameOn:
-            ## NAO SEI FAZER ESTA PARTE
-            return;
+            while game.gameIsOn:
+                game.display_game_info()
+
+                print(game.printBoard())
+
+                print("Move Up (w)    Move Down (s)   Move Left  (a)    Move Right   (d)")
+                value = str(input())
+                game.processInput(value);
+            if game.checkSum():
+                print("All pieces attack an equal number of squares")
+            else:
+                print("Pieces have a different number of squares attacked")
+            time.sleep(5)
+
 
     def ai_mode(self):
         print("Select algorithm: ")

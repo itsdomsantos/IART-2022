@@ -390,3 +390,5 @@ class Board:
                     other.manhattan_distance() + other.attack_diff() + other.cost)
         else:
             return self.cost < other.cost
+
+
