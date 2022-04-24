@@ -170,7 +170,7 @@ class Menu:
             time.sleep(10)
 
         if not self.pygameOn:
-            algorithm.a_starTerminal()
+            algorithm.a_start_terminal()
             time.sleep(10)
 
     def greedy_mode(self, heuristic):
@@ -189,7 +189,7 @@ class Menu:
             time.sleep(10)
 
         if not self.pygameOn: ### falta so para o terminal
-            algorithm.greedyTerminal()
+            algorithm.greedy_terminal()
             time.sleep(10)
 
 
@@ -207,7 +207,7 @@ class Menu:
             screen.update_board(algorithm.game.board)
             time.sleep(10)
         elif not self.pygameOn:
-            algorithm.dfsTerminal()
+            algorithm.dfs_terminal()
             time.sleep(10)
 
 

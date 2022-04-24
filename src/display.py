@@ -4,7 +4,60 @@ import pygame as pg
 
 
 class Display:
+    """
+                A class used to implement the dfs algorithm
 
+                ...
+
+                Attributes
+                ----------
+                size : game size
+                width : board width
+                heigth : board width
+                WHITE : tuple to use white color
+                BLACK : tuple to use black color
+                GREEN : tuple to use green color
+                BLUE : tuple to use blue color
+                RED : tuple to use red color
+                BLOCKSIZE : size of the tile
+                screen : pygame display
+                king : chess king png
+                queen : chess queen png
+                bishop : chess bishop png
+                rook : chess rook png
+                knight : chess knight png
+                pawn : chess pawn png
+                begin : 's' begin png
+                end : 'f' end png
+                hint : stores the position of the hint
+
+
+                Methods
+                -------
+                init_board(self):
+                    calculates the solution using the dfs algorithm and uses pygame
+                update_board(self, board):
+                    calculates the solution using the dfs algorithm and uses terminal to print info
+                color_square(self, x, y, color):
+                    colors the square of the position x,y with color of the input
+                get_chess_piece(self, type):
+                    returns the png corresponding of the input type
+                draw_chess_piece(self, type, position):
+                    draws the chess of the input type in the position entered as parameter
+                delete_square(self, x, y):
+                    colors in white the square in the postion x,y
+                add_hint(self, x, y, valid):
+                    colors in blue the square in the postion of the solution if valid or the current position in red if not valid
+                add_square(self, x, y):
+                    colors in green the square in the postion x,y
+                draw_pieces(self, pieces):
+                    draws all the chess pieces of the board
+                draw_borders(self):
+                    draws the begin and end tiles
+                reset_board(self, board):
+                    deletes all green tiles and sets them to white
+
+        """
     def __init__(self, size):
         self.size = size
         self.width = size * 100

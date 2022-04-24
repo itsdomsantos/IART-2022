@@ -5,6 +5,33 @@ import sys
 
 
 class DFS:
+    """
+            A class used to implement the dfs algorithm
+
+            ...
+
+            Attributes
+            ----------
+            game : stores the initial game created
+            solution : stores the solution of the level
+            visited : stores the visited nodes
+            possible_moves : list with all possible moves
+            done : bool that indicates if the solution has been found or not
+
+            Methods
+            -------
+            dfs(self,screen):
+                calculates the solution using the dfs algorithm and uses pygame
+            dfs_terminal(self):
+                calculates the solution using the dfs algorithm and uses terminal to print info
+            check_visited(self, board):
+                verifies if the node was already visited
+            get_state(self, board):
+                returns the state of the input board
+            add_move(self, x, board):
+                adds the x move (up, down, left, right) to the visited states
+
+    """
     def __init__(self, level):
         self.game = board.Board("./levels/level" + level + ".txt", True)
         self.solution = self.game.snake.path
@@ -55,7 +82,7 @@ class DFS:
             if len(self.get_state(self.game.board).moves) == 4:
                 self.dfs(screen)
 
-    def dfsTerminal(self):  # function for dfs on terminal
+    def dfs_terminal(self):  # function for dfs on terminal
         if self.done:
             return
         temp = copy.deepcopy(self.game.board)
@@ -72,7 +99,7 @@ class DFS:
             self.game.undoLastMovement()
             self.game.board[0][self.game.size - 1] = 'f'
             self.game.gameIsOn = True
-            self.dfsTerminal()
+            self.dfs_terminal()
 
         for x in self.possible_moves:
             if self.done:
@@ -85,9 +112,9 @@ class DFS:
                     self.game.undoLastMovement()
                     self.game.undoLastMovement()
                     self.game.board[0][self.game.size - 1] = 'f'
-                self.dfsTerminal()
+                self.dfs_terminal()
             if len(self.get_state(self.game.board).moves) == 4:
-                self.dfsTerminal()
+                self.dfs_terminal()
 
     def check_visited(self, board):
         for i in self.visited:
