@@ -126,8 +126,8 @@ class Menu:
             while game.gameIsOn:
                 game.display_game_info()
 
-                print(game.print_board())
-
+                game.print_board()
+                print("=================================================================")
                 print("Move Up (w)    Move Down (s)   Move Left  (a)    Move Right   (d)")
                 value = str(input())
                 game.process_input(value);

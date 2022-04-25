@@ -62,7 +62,10 @@ class Greedy:
         screen.reset_board(current_state)
         screen.update_board(current_state.board)
 
-        print(current_state.print_board())
+        current_state.print_board()
+        print()
+        print("====================")
+        print()
         board = copy.deepcopy(current_state.board)
 
         if not self.check_visited(board):
@@ -72,7 +75,6 @@ class Greedy:
             print("done")
             self.solution = current_state.snake.path
             self.game = current_state
-            print(self.solution)
             self.done = True
             return
 
@@ -98,7 +100,10 @@ class Greedy:
         item = self.queue.get()
         current_state = item[1]
 
-        print(current_state.print_board())
+        current_state.print_board()
+        print()
+        print("====================")
+        print()
         board = copy.deepcopy(current_state.board)
 
         if not self.check_visited(board):
@@ -108,7 +113,6 @@ class Greedy:
             print("done")
             self.solution = current_state.snake.path
             self.game = current_state
-            print(self.solution)
             self.done = True
             return
 

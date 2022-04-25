@@ -46,7 +46,10 @@ class DFS:
         screen.update_board(self.game.board)
         if self.done:
             return
-        print(self.game.print_board())
+        self.game.print_board()
+        print()
+        print("====================")
+        print()
 
         temp = copy.deepcopy(self.game.board)
         if not self.check_visited(temp):

@@ -63,7 +63,10 @@ class ASTAR:
 
 
 
-        print(current_state.print_board())
+        current_state.print_board()
+        print()
+        print("====================")
+        print()
         board = copy.deepcopy(current_state.board)
 
         if not self.check_visited(board):
@@ -101,7 +104,10 @@ class ASTAR:
 
 
 
-        print(current_state.print_board())
+        current_state.print_board()
+        print()
+        print("====================")
+        print()
         board = copy.deepcopy(current_state.board)
 
         if not self.check_visited(board):
