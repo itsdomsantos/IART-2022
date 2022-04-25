@@ -47,6 +47,10 @@ python main.py
 
 - Choose the algorithm you want to use
 - If you choose greedy or a-star choose also and heuristic
+- Heuristic:
+  - 0 : Manhattan Distance
+  - 1 : Maximum Chess Piece Attacks Difference
+  - 2 : Both 0 and 1
 - Then, depending if you choose terminal or pygame you'll see an animated calculation of the algorithm
 
 ### Level Loading

@@ -1,6 +1,6 @@
 class State:
     """
-        A class used to represent a State
+        A class used to represent a game state for algorithms
 
         ...
 

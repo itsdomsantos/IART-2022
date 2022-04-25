@@ -5,7 +5,7 @@ import snake
 
 class Board:
     """
-                      A class used to implement graphic interface using pygame
+                      A class used to implement the game logic and its status
 
                       ...
 

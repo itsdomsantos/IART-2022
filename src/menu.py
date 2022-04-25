@@ -9,7 +9,7 @@ import greedy
 
 class Menu:
     """
-                    A class used to implement graphic interface using pygame
+                    A class used to implement the menu in the terminal
 
                     ...
 
