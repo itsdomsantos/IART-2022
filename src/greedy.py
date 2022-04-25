@@ -89,7 +89,6 @@ class Greedy:
             self.add_move(x, board)
             if temp.process_input(x):
                 self.queue.put((self.heuristic_calculation(temp, self.heuristic), temp))
-            print(self.heuristic_calculation(temp, self.heuristic))
         self.greedy(screen)
 
     def greedy_terminal(self):
@@ -126,7 +125,6 @@ class Greedy:
             self.add_move(x, board)
             if temp.process_input(x):
                 self.queue.put((self.heuristic_calculation(temp, self.heuristic), temp))
-            print(self.heuristic_calculation(temp, self.heuristic))
         self.greedy_terminal()
 
     def heuristic_calculation(self, game, type):
