@@ -48,3 +48,26 @@ python main.py
 - Choose the algorithm you want to use
 - If you choose greedy or a-star choose also and heuristic
 - Then, depending if you choose terminal or pygame you'll see an animated calculation of the algorithm
+
+### Level Loading
+- For each level there is a txt file associated, which name is **level[number_of_the_level].txt**
+- An example of the file is:
+```
+5          # Board size
+k 1 3      # Chess pieces existing in the board
+r 1 1      # type of the chess piece - x (column) - y (row)
+sol        # spacer between chess pieces and the solution
+0 4        # coordinates of the solution (allows the player to ask for an hint)
+0 3        # without running an algorithm for better performance in single player mode 
+0 2        # x (column) - y (row)
+0 1        
+0 0        
+1 0        
+2 0        
+2 1        
+2 2        
+3 2        
+4 2        
+4 1        
+4 0        
+```
