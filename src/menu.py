@@ -4,10 +4,40 @@ import display
 import pygame as pg
 import sys
 import dfs
-import Astar
+import astar
 import greedy
 
 class Menu:
+    """
+                    A class used to implement graphic interface using pygame
+
+                    ...
+
+                    Attributes
+                    ----------
+                    pygameOn : indicates if graphic interface is on or not
+
+                    Methods
+                    -------
+                    main_menu(self):
+                        Used to select between graphic or terminal interface and to select either CPU or human user
+                    single_player_mode(self):
+                       Used to control the flow of the single player mode
+                    ai_mode(self):
+                       Used to select which algorithm implemented to use
+                    select_heuristic(self, alg):
+                       Used to select the heuristic for the selected algorithm (alg)
+                    a_star_mode(self, heuristic):
+                       Used to ruin AI mode using a-star algorithm for the selected heuristic (heuristic)
+                    greedy_mode(self, heuristic):
+                       Used to ruin AI mode using greedy algorithm for the selected heuristic (heuristic)
+                    dfs_mode(self, heuristic):
+                       Used to ruin AI mode using dfs algorithm
+                    level_menu(self):
+                       Used to select the puzzle (20 levels)
+
+
+    """
     def __init__(self):
         self.pygameOn = False;
         sys.setrecursionlimit(100000)
@@ -59,9 +89,9 @@ class Menu:
                         mouseY = event.pos[1]  # y
                         clicked_row = int(mouseX // screen.BLOCKSIZE)
                         clicked_col = int(mouseY // screen.BLOCKSIZE)
-                        value = game.getInput(clicked_row, clicked_col)
+                        value = game.get_input(clicked_row, clicked_col)
                         if value != "0":
-                            game.processInput(value)
+                            game.process_input(value)
                             screen.update_board(game.board)
                             if game.cost == 0:
                                 screen.reset_board(game)
@@ -78,14 +108,14 @@ class Menu:
                             game.display_game_info()
                             if len(game.snake.path) > 1:
                                 screen.delete_square(game.actualX, game.actualY)
-                                game.undoLastMovement()
+                                game.undo_last_movement()
                         elif event.key == pg.K_ESCAPE:
                             sys.exit()
 
             screen.update_board(game.board)
             screen.draw_chess_piece("f", (game.size - 1, 0))
             pg.display.update()
-            if game.checkSum():
+            if game.check_sum():
                 print("All pieces attack an equal number of squares")
             else:
                 print("Pieces have a different number of squares attacked")
@@ -96,12 +126,12 @@ class Menu:
             while game.gameIsOn:
                 game.display_game_info()
 
-                print(game.printBoard())
+                print(game.print_board())
 
                 print("Move Up (w)    Move Down (s)   Move Left  (a)    Move Right   (d)")
                 value = str(input())
-                game.processInput(value);
-            if game.checkSum():
+                game.process_input(value);
+            if game.check_sum():
                 print("All pieces attack an equal number of squares")
             else:
                 print("Pieces have a different number of squares attacked")
@@ -116,17 +146,17 @@ class Menu:
             self.dfs_mode(self)
             return
         elif menuchoice == "1":
-            self.select_Heuristic(self, 1)
+            self.select_heuristic(self, 1)
             return
         elif menuchoice == "2":
-            self.select_Heuristic(self, 2)
+            self.select_heuristic(self, 2)
             return
         else:
             print("Invalid Input!")
             self.main_menu(self)
             return
 
-    def select_Heuristic(self, alg):
+    def select_heuristic(self, alg):
         print("Select heuristic: ")
         print("Heuristic 1 (0)   Heuristic 2 (1)    Heuristic 3 (2)")
         menuchoice = str(input())
@@ -156,7 +186,7 @@ class Menu:
 
     def a_star_mode(self, heuristic):
         level = self.level_menu(self)
-        algorithm = Astar.ASTAR(level, heuristic)
+        algorithm = astar.ASTAR(level, heuristic)
 
         if self.pygameOn:
             screen = display.Display(algorithm.game.size)
@@ -171,7 +201,6 @@ class Menu:
 
         if not self.pygameOn:
             algorithm.a_start_terminal()
-            time.sleep(10)
 
     def greedy_mode(self, heuristic):
         level = self.level_menu(self)
@@ -188,9 +217,8 @@ class Menu:
             screen.update_board(algorithm.game.board)
             time.sleep(10)
 
-        if not self.pygameOn: ### falta so para o terminal
+        if not self.pygameOn:
             algorithm.greedy_terminal()
-            time.sleep(10)
 
 
     def dfs_mode(self):

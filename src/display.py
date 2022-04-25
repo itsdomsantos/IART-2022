@@ -5,7 +5,7 @@ import pygame as pg
 
 class Display:
     """
-                A class used to implement the dfs algorithm
+                A class used to implement graphic interface using pygame
 
                 ...
 

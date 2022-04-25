@@ -46,21 +46,21 @@ class DFS:
         screen.update_board(self.game.board)
         if self.done:
             return
-        print(self.game.printBoard())
+        print(self.game.print_board())
 
         temp = copy.deepcopy(self.game.board)
         if not self.check_visited(temp):
             self.visited.append(state.State(temp))
 
-        if not self.game.gameIsOn and self.game.checkSum():
+        if not self.game.gameIsOn and self.game.check_sum():
             print("done")
             self.done = True
             return
 
-        if not self.game.checkAvailableMoves() or not self.game.gameIsOn or len(
+        if not self.game.check_available_moves() or not self.game.gameIsOn or len(
                 self.get_state(self.game.board).moves) == 4:
             screen.delete_square(self.game.actualX, self.game.actualY)
-            self.game.undoLastMovement()
+            self.game.undo_last_movement()
             self.game.board[0][self.game.size - 1] = 'f'
             self.game.gameIsOn = True
             self.dfs(screen)
@@ -71,32 +71,36 @@ class DFS:
             if x in self.get_state(self.game.board).moves:
                 continue
             self.add_move(x, self.game.board)
-            if self.game.processInput(x):
+            if self.game.process_input(x):
                 if self.check_visited(self.game.board) and x not in self.get_state(self.game.board).moves:
                     screen.delete_square(self.game.actualX, self.game.actualY)
-                    self.game.undoLastMovement()
+                    self.game.undo_last_movement()
                     screen.delete_square(self.game.actualX, self.game.actualY)
-                    self.game.undoLastMovement()
+                    self.game.undo_last_movement()
                     self.game.board[0][self.game.size - 1] = 'f'
                 self.dfs(screen)
             if len(self.get_state(self.game.board).moves) == 4:
                 self.dfs(screen)
 
-    def dfs_terminal(self):  # function for dfs on terminal
+    def dfs_terminal(self):
+        self.game.print_board()
+        print()
+        print("====================")
+        print()
         if self.done:
             return
         temp = copy.deepcopy(self.game.board)
         if not self.check_visited(temp):
             self.visited.append(state.State(temp))
 
-        if not self.game.gameIsOn and self.game.checkSum():
+        if not self.game.gameIsOn and self.game.check_sum():
             print("done")
             self.done = True
             return
 
-        if not self.game.checkAvailableMoves() or not self.game.gameIsOn or len(
+        if not self.game.check_available_moves() or not self.game.gameIsOn or len(
                 self.get_state(self.game.board).moves) == 4:
-            self.game.undoLastMovement()
+            self.game.undo_last_movement()
             self.game.board[0][self.game.size - 1] = 'f'
             self.game.gameIsOn = True
             self.dfs_terminal()
@@ -107,10 +111,10 @@ class DFS:
             if x in self.get_state(self.game.board).moves:
                 continue
             self.add_move(x, self.game.board)
-            if self.game.processInput(x):
+            if self.game.process_input(x):
                 if self.check_visited(self.game.board) and x not in self.get_state(self.game.board).moves:
-                    self.game.undoLastMovement()
-                    self.game.undoLastMovement()
+                    self.game.undo_last_movement()
+                    self.game.undo_last_movement()
                     self.game.board[0][self.game.size - 1] = 'f'
                 self.dfs_terminal()
             if len(self.get_state(self.game.board).moves) == 4:

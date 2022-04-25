@@ -63,21 +63,20 @@ class ASTAR:
 
 
 
-        print(current_state.printBoard())
+        print(current_state.print_board())
         board = copy.deepcopy(current_state.board)
 
         if not self.check_visited(board):
             self.visited.append(state.State(board))
 
-        if not current_state.gameIsOn and current_state.checkSum():
+        if not current_state.gameIsOn and current_state.check_sum():
             print("done")
             self.solution = current_state.snake.path
             self.game = current_state
-            print(self.solution)
             self.done = True
             return
 
-        if not current_state.checkAvailableMoves or not current_state.gameIsOn or len(
+        if not current_state.check_available_moves or not current_state.gameIsOn or len(
                 self.get_state(board).moves) == 4:
             self.a_star(screen)
 
@@ -88,9 +87,8 @@ class ASTAR:
             if x in self.get_state(board).moves:
                 continue
             self.add_move(x, board)
-            if temp.processInput(x):
+            if temp.process_input(x):
                 self.queue.put((self.heuristic_calculation(temp, self.heuristic), temp))
-            print(self.heuristic_calculation(temp, self.heuristic))
         self.a_star(screen)
 
 
@@ -103,21 +101,20 @@ class ASTAR:
 
 
 
-        print(current_state.printBoard())
+        print(current_state.print_board())
         board = copy.deepcopy(current_state.board)
 
         if not self.check_visited(board):
             self.visited.append(state.State(board))
 
-        if not current_state.gameIsOn and current_state.checkSum():
+        if not current_state.gameIsOn and current_state.check_sum():
             print("done")
             self.solution = current_state.snake.path
             self.game = current_state
-            print(self.solution)
             self.done = True
             return
 
-        if not current_state.checkAvailableMoves or not current_state.gameIsOn or len(
+        if not current_state.check_available_moves or not current_state.gameIsOn or len(
                 self.get_state(board).moves) == 4:
             self.a_start_terminal()
 
@@ -128,9 +125,8 @@ class ASTAR:
             if x in self.get_state(board).moves:
                 continue
             self.add_move(x, board)
-            if temp.processInput(x):
+            if temp.process_input(x):
                 self.queue.put((self.heuristic_calculation(temp, self.heuristic), temp))
-            print(self.heuristic_calculation(temp, self.heuristic))
         self.a_start_terminal()
 
 

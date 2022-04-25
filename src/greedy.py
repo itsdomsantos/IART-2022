@@ -62,13 +62,13 @@ class Greedy:
         screen.reset_board(current_state)
         screen.update_board(current_state.board)
 
-        print(current_state.printBoard())
+        print(current_state.print_board())
         board = copy.deepcopy(current_state.board)
 
         if not self.check_visited(board):
             self.visited.append(state.State(board))
 
-        if not current_state.gameIsOn and current_state.checkSum():
+        if not current_state.gameIsOn and current_state.check_sum():
             print("done")
             self.solution = current_state.snake.path
             self.game = current_state
@@ -76,7 +76,7 @@ class Greedy:
             self.done = True
             return
 
-        if not current_state.checkAvailableMoves or not current_state.gameIsOn or len(
+        if not current_state.check_available_moves or not current_state.gameIsOn or len(
                 self.get_state(board).moves) == 4:
             self.greedy(screen)
 
@@ -87,7 +87,7 @@ class Greedy:
             if x in self.get_state(board).moves:
                 continue
             self.add_move(x, board)
-            if temp.processInput(x):
+            if temp.process_input(x):
                 self.queue.put((self.heuristic_calculation(temp, self.heuristic), temp))
             print(self.heuristic_calculation(temp, self.heuristic))
         self.greedy(screen)
@@ -99,13 +99,13 @@ class Greedy:
         item = self.queue.get()
         current_state = item[1]
 
-        print(current_state.printBoard())
+        print(current_state.print_board())
         board = copy.deepcopy(current_state.board)
 
         if not self.check_visited(board):
             self.visited.append(state.State(board))
 
-        if not current_state.gameIsOn and current_state.checkSum():
+        if not current_state.gameIsOn and current_state.check_sum():
             print("done")
             self.solution = current_state.snake.path
             self.game = current_state
@@ -113,7 +113,7 @@ class Greedy:
             self.done = True
             return
 
-        if not current_state.checkAvailableMoves or not current_state.gameIsOn or len(
+        if not current_state.check_available_moves or not current_state.gameIsOn or len(
                 self.get_state(board).moves) == 4:
             self.greedy_terminal()
 
@@ -124,7 +124,7 @@ class Greedy:
             if x in self.get_state(board).moves:
                 continue
             self.add_move(x, board)
-            if temp.processInput(x):
+            if temp.process_input(x):
                 self.queue.put((self.heuristic_calculation(temp, self.heuristic), temp))
             print(self.heuristic_calculation(temp, self.heuristic))
         self.greedy_terminal()
